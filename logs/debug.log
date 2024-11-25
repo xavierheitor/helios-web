@@ -1,0 +1,83 @@
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:40:21"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:40:32"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:40:32"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:40:35"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:40:35"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:40:36"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:40:36"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:40:40"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:40:40"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:40:48"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:40:48"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:41:08"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:41:08"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:41:31"}
+{"level":"info","message":"Usuário 1 buscou 2 usuários","timestamp":"2024-11-25 19:41:31"}
+{"level":"info","message":"deleteUser action called for id 2","timestamp":"2024-11-25 19:41:36"}
+{"level":"info","message":"User 2 deletado logicamente pelo usuário 1","timestamp":"2024-11-25 19:41:36"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:41:36"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:41:36"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:42:30"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:42:49"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:42:49"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:43:20"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:43:20"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Usuário não autenticado","timestamp":"2024-11-25 19:43:20"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:43:44"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:43:44"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: teste","timestamp":"2024-11-25 19:43:44"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:51:42"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:51:42"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: teste","timestamp":"2024-11-25 19:51:42"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:52:23"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 19:52:23"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:52:46"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:53:55"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 19:54:16"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:03:07"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:03:24"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:04:17"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:07:10"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:08:19"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:08:19"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:10:34"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:10:34"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:10:36"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:10:36"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:10:39"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:10:39"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:10:41"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:10:41"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:10:59"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:10:59"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:11:48"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:11:48"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:11:50"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:11:50"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:11:52"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:11:52"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:12:06"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:12:09"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:12:26"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:12:26"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:12:52"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:12:52"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: teste","timestamp":"2024-11-25 20:12:52"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:13:07"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:13:07"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:13:20"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:13:20"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:13:21"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:13:21"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:16:00"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:16:00"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:16:06"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:16:06"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:16:22"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:16:22"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:16:23"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:16:23"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:16:56"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:16:56"}
+{"level":"info","message":"fetchUsers action called!","timestamp":"2024-11-25 20:18:23"}
+{"level":"info","message":"Usuário 1 buscou 1 usuários","timestamp":"2024-11-25 20:18:23"}

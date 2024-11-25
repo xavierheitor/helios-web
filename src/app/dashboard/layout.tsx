@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { Layout, Button } from "antd";
+import React, { Suspense, useState } from "react";
+import { Layout, Button, Space, Spin } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Footer } from "antd/es/layout/layout";
 import Logo from "@/components/Logo/Logo";
 import SideBar from "@/components/SideBar/SideBar";
 import TopMenu from "@/components/TopMenu/TopMenu";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import ErrorFallback from "@/components/ErrorFallback/ErrorFallback";
 
 const { Header, Content, Sider } = Layout;
 
@@ -85,7 +87,17 @@ export default function Home({
             borderRadius: 2,
           }}
         >
-          {children}
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense
+              fallback={
+                <Space>
+                  <Spin />
+                </Space>
+              }
+            >
+              {children}
+            </Suspense>
+          </ErrorBoundary>
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Helios ©{new Date().getFullYear()} Created by Helix
