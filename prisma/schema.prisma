@@ -1,0 +1,432 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  username String  @unique @db.VarChar(50)
+  email    String? @unique @db.VarChar(255)
+  password String  @db.VarChar(255)
+  name     String? @db.VarChar(255)
+
+  deletedAt DateTime?
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now())
+
+  // Relacionamentos para permissões
+  contractPermissions UserContractPermission[]
+  menuPermissions     UserMenuPermission[]
+  modulePermission    UserModulePermission[]
+
+  // Relacionamentos para contas e sessões do NextAuth
+  accounts Account[]
+  sessions Session[]
+
+  // Relacionamento com os logs de ação
+  ActionLog ActionLog[]
+}
+
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model UserContractPermission {
+  id Int @id @default(autoincrement())
+
+  // Relacionamento com usuário
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relacionamento com contrato
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  // Campos de permissão
+  canView   Boolean @default(false)
+  canCreate Boolean @default(false)
+  canEdit   Boolean @default(false)
+  canDelete Boolean @default(false)
+
+  // Timestamp para criação
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  @@unique([userId, contractId])
+}
+
+model UserModulePermission {
+  id Int @id @default(autoincrement())
+
+  // Relacionamento com usuário
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  module String
+
+  canView   Boolean @default(false)
+  canCreate Boolean @default(false)
+  canEdit   Boolean @default(false)
+  canDelete Boolean @default(false)
+
+  // Timestamp para criação
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  @@unique([userId, module])
+}
+
+model UserMenuPermission {
+  id Int @id @default(autoincrement())
+
+  // Relacionamento com usuário
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  menuKey String
+  href    String
+
+  // Timestamp para criação
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  @@unique([userId, menuKey])
+}
+
+//------------------------- CADASTROS -------------------------
+model Contractor {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(100) // Nome do contratante
+  cnpj  String @db.Char(14) // Validação de CNPJ com 14 caracteres
+  state String @db.Char(2) // Código do estado (e.g., "SP", "RJ")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  contracts Contract[]
+}
+
+model Contract {
+  id     Int    @id @default(autoincrement())
+  number String @unique @db.VarChar(20) // Número único do contrato
+  name   String @db.VarChar(100) // Nome do contrato
+
+  initialDate DateTime @db.Date // Data de início
+  finalDate   DateTime @db.Date // Data de término
+
+  contractorId Int
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  bases       Base[] // Bases associadas
+  permissions UserContractPermission[] // Permissões associadas
+  employees   Employee[] // Funcionários associados
+  vehicles    Vehicle[] // Veículos associados
+  teams       Team[] // Equipes associadas
+
+  DeviceContractPermissions DeviceContractPermissions[] // Permissões de dispositivos
+}
+
+model Base {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+}
+
+model Employee {
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(100)
+  cpf             String    @unique @db.Char(11)
+  rg              String    @unique @db.Char(9)
+  email           String    @unique
+  birthDate       DateTime  @db.Date
+  contact         String
+  admissionDate   DateTime  @db.Date
+  resingationDate DateTime? @db.Date
+  city            String
+  estate          String    @db.Char(2)
+  cep             String    @db.Char(8)
+  address         String
+  number          String
+  district        String
+  registration    Int       @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model Role {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  baseSalary  Float?
+  deletedAt   DateTime?
+
+  employees Employee[]
+}
+
+model Vehicle {
+  id                Int    @id @default(autoincrement())
+  plate             String @unique
+  brand             String
+  model             String
+  year              Int
+  color             String
+  operationalNumber String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  vechicleTypeId Int
+  vehicleType    VehicleType @relation(fields: [vechicleTypeId], references: [id], onDelete: Cascade)
+}
+
+model VehicleType {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  vehicles Vehicle[]
+
+  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
+}
+
+model Team {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  teamTypeId Int
+  teamType   TeamType @relation(fields: [teamTypeId], references: [id], onDelete: Cascade)
+}
+
+model TeamType {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  teams Team[]
+
+  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
+}
+
+model Device {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  deviceTypeId String @unique
+  key          String @unique @default("123456")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  DeviceContractPermissions DeviceContractPermissions[]
+}
+
+model DeviceContractPermissions {
+  id Int @id @default(autoincrement())
+
+  deviceId Int
+  device   Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  @@unique([deviceId, contractId])
+}
+
+//------------------------- CHECKLISTS -------------------------
+
+model ChecklistType {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  Answer Answer[]
+
+  Question Question[]
+
+  Checklist Checklist[]
+}
+
+model Answer {
+  id   Int    @id @default(autoincrement())
+  text String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  checklistTypeId Int
+  checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
+}
+
+model Question {
+  id   Int    @id @default(autoincrement())
+  text String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  checklistTypeId Int
+  checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
+
+  ChecklistAssociatedQuestion ChecklistAssociatedQuestion[]
+}
+
+model Checklist {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+
+  checklistTypeId Int
+  checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  associatedQuestions ChecklistAssociatedQuestion[]
+
+  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
+
+  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
+}
+
+model ChecklistAssociatedQuestion {
+  id Int @id @default(autoincrement())
+
+  checklistId Int
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([checklistId, questionId])
+}
+
+model ChecklistVehicleTypeAssossiation {
+  id Int @id @default(autoincrement())
+
+  checklistId Int
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  vehicleTypeId Int
+  vehicleType   VehicleType @relation(fields: [vehicleTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([vehicleTypeId])
+}
+
+model ChecklistTeamTypeAssossiation {
+  id Int @id @default(autoincrement())
+
+  checklistId Int
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  teamTypeId Int
+  teamType   TeamType @relation(fields: [teamTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([teamTypeId])
+}
+
+// ------------------ ACTION LOG -------------------------
+model ActionLog {
+  id         Int      @id @default(autoincrement())
+  action     String // Descrição da ação realizada (e.g., "CREATE", "UPDATE", "DELETE")
+  userId     Int? // ID do usuário que executou a ação (null se for um sistema externo)
+  user       User?    @relation(fields: [userId], references: [id])
+  targetId   Int? // ID do recurso afetado (exemplo: contrato, checklist, etc.)
+  targetType String // Tipo do recurso afetado (e.g., "Contrato", "Checklist")
+  details    String?  @db.LongText // JSON ou texto com detalhes adicionais da ação
+  createdAt  DateTime @default(now()) // Quando a ação foi realizada
+}
