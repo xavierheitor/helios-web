@@ -2,3 +2,17 @@
 {"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: teste","timestamp":"2024-11-25 19:43:44"}
 {"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: teste","timestamp":"2024-11-25 19:51:42"}
 {"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: teste","timestamp":"2024-11-25 20:12:52"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Erro desconhecido ao buscar usuários","timestamp":"2024-11-25 20:22:47"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Erro desconhecido ao buscar usuários","timestamp":"2024-11-25 20:25:04"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Erro desconhecido ao buscar usuários","timestamp":"2024-11-25 20:25:07"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Erro desconhecido ao buscar usuários","timestamp":"2024-11-25 20:25:08"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Erro desconhecido ao buscar usuários","timestamp":"2024-11-25 20:25:19"}
+{"error":{"name":"SWRError"},"level":"error","message":"Erro ao buscar usuários: Erro desconhecido ao buscar usuários","timestamp":"2024-11-25 20:25:25"}
+{"errors":{"password":["Expected string, received null"]},"level":"error","message":"Campos do formulário inválidos","timestamp":"2024-11-25 21:14:02"}
+{"errors":{"password":["Expected string, received null"]},"level":"error","message":"Campos do formulário inválidos","timestamp":"2024-11-25 21:16:30"}
+{"errors":{"password":["Expected string, received null"]},"level":"error","message":"Campos do formulário inválidos","timestamp":"2024-11-25 21:16:44"}
+{"level":"error","message":"ID do User inválido: userContract-1","timestamp":"2024-11-26 08:17:24"}
+{"level":"error","message":"ID do User inválido: userContract-1","timestamp":"2024-11-26 08:17:27"}
+{"level":"error","message":"ID do User inválido: userContract-1","timestamp":"2024-11-26 08:17:38"}
+{"level":"error","message":"ID do User inválido: userContract-1","timestamp":"2024-11-26 08:17:56"}
+{"level":"error","message":"ID do User inválido: userContract-1","timestamp":"2024-11-26 08:18:07"}
