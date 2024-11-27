@@ -34,7 +34,7 @@ export async function deleteUser(id: number): Promise<ActionResult> {
       where: { userId: id },
     });
 
-    await prisma.user.delete({ where: { id } });
+    await prisma.softDelete("user", { id });
 
     logger.info(
       `User ${id} deletado logicamente pelo usuário ${session.userId}`

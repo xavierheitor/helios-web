@@ -1,15 +1,15 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { logger, prismaLogger } from "./logger";
 
-// Estender o tipo PrismaClient para incluir _currentUserId
-interface ExtendedPrismaClient extends PrismaClient {
+// Estender o tipo PrismaClient para incluir _currentUserId e softDelete
+class ExtendedPrismaClient extends PrismaClient {
   _currentUserId?: number | null;
 }
 
-// Criar a instância de Prisma com o tipo estendido
-const prisma: ExtendedPrismaClient =
+// Criar a instância de Prisma
+const prisma =
   globalThis.prisma ||
-  new PrismaClient({
+  new ExtendedPrismaClient({
     log: [
       { level: "query", emit: "event" },
       { level: "info", emit: "event" },
@@ -21,6 +21,33 @@ const prisma: ExtendedPrismaClient =
 if (process.env.NODE_ENV !== "production") {
   globalThis.prisma = prisma;
 }
+// Adicionando o método softDelete ao prisma
+prisma.softDelete = async function <T extends keyof PrismaClient>(
+  model: T,
+  where: Record<string, any>
+): Promise<void> {
+  try {
+    const delegate = (this as any)[model];
+    if (!delegate || typeof delegate.update !== "function") {
+      throw new Error(`O modelo ${String(model)} não existe no PrismaClient.`);
+    }
+
+    // O argumento `where` é passado diretamente, sem aninhamento
+    await delegate.update({
+      where,
+      data: { deletedAt: new Date() },
+    });
+
+    prismaLogger.info(
+      `Soft delete realizado no modelo ${String(
+        model
+      )} para ID ${JSON.stringify(where)}`
+    );
+  } catch (error) {
+    logger.error("Erro ao realizar soft delete:", error);
+    throw error;
+  }
+};
 
 // Configuração de logs do Prisma para arquivos separados
 prisma.$on("query" as never, (e: Prisma.QueryEvent) => {
@@ -39,25 +66,8 @@ prisma.$on("error" as never, (e: Prisma.LogEvent) => {
   prismaLogger.error(`Error: ${e.message}`);
 });
 
-// Middleware para soft delete e exclusão lógica
+// Middleware para interceptar soft delete e exclusão lógica
 prisma.$use(async (params, next) => {
-  // Interceptar ações de delete para soft delete
-  if (params.action === "delete") {
-    params.action = "update";
-    params.args = {
-      ...params.args,
-      data: { deletedAt: new Date() }, // Marca como deletado
-    };
-  }
-
-  if (params.action === "deleteMany") {
-    params.action = "updateMany";
-    params.args = {
-      ...params.args,
-      data: { deletedAt: new Date() }, // Marca como deletado
-    };
-  }
-
   // Interceptar ações de busca para ignorar registros deletados logicamente
   if (["findUnique", "findFirst", "findMany"].includes(params.action)) {
     if (!params.args) {
