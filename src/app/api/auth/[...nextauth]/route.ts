@@ -101,28 +101,18 @@ export const authOptions: NextAuthOptions = {
         });
 
         // Estruturar as permissões em um objeto para facilitar o acesso no frontend
-        token.permissions = userPermissions.reduce((acc, perm) => {
+        token.modulesPermissions = userPermissions.reduce((acc, perm) => {
           const key = perm.module; // Removido contratoId das chaves
           acc[key] = {
             canView: perm.canView,
             canCreate: perm.canCreate,
             canEdit: perm.canEdit,
             canDelete: perm.canDelete,
+            menuKey: perm.menuKey,
+            href: perm.href,
           };
           return acc;
-        }, {} as Record<string, { canView: boolean; canCreate: boolean; canEdit: boolean; canDelete: boolean }>);
-
-        // Buscar permissões do usuário no modelo userMenuPermission
-        const menusPermissions = await prisma.userMenuPermission.findMany({
-          where: {
-            userId: parseInt(user.id, 10),
-          },
-        });
-
-        token.menuPermissions = menusPermissions.map((menu) => ({
-          key: menu.menuKey,
-          href: menu.href,
-        }));
+        }, {} as Record<string, { canView: boolean; canCreate: boolean; canEdit: boolean; canDelete: boolean; menuKey: string | null; href: string | null }>);
 
         return token;
       }
@@ -136,31 +126,16 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email as string;
         session.user.allowedContratos =
           (token.allowedContratos as number[]) || [];
-
-        // Adicione as permissões à sessão
-        session.user.modulesPermissions =
-          (token.modulesPermissions as Record<
-            string,
-            {
-              canView: boolean;
-              canCreate: boolean;
-              canEdit: boolean;
-              canDelete: boolean;
-            }
-          >) || {};
-
-        session.user.menuPermissions = token.menuPermissions || [];
+        session.user.modulesPermissions = token.modulesPermissions || {};
 
         // Define o ID do usuário logado no Prisma
         setCurrentUserId(parseInt(token.id as string, 10)); // Integração com o ActionLog
       }
       return session;
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async signIn({ user, account, profile, email, credentials }) {
       return true;
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async redirect({ url, baseUrl }) {
       return baseUrl;
     },

@@ -28,10 +28,10 @@ export async function editModulePermission(
     formData.get("id")?.toString() || "0"
   );
   if (isNaN(userModulePermissionId) || userModulePermissionId <= 0) {
-    logger.error(`ID do User inválido: ${formData.get("id")}`);
+    logger.error(`ID de permissao do modulo inválida: ${formData.get("id")}`);
     return {
       success: false,
-      message: "ID do usuário inválido",
+      message: "ID de permissao do modulo inválida:",
     };
   }
 
@@ -66,7 +66,8 @@ export async function editModulePermission(
     };
   }
 
-  const { canView, canCreate, canEdit, canDelete } = validatedFields.data;
+  const { canView, canCreate, canEdit, canDelete, module } =
+    validatedFields.data;
 
   try {
     await prisma.userModulePermission.update({
@@ -78,6 +79,7 @@ export async function editModulePermission(
         canCreate,
         canEdit,
         canDelete,
+        module,
       },
     });
 

@@ -1,14 +1,11 @@
-// src/components/SideBar.tsx
-
 "use client";
 
-import { Menu } from "antd";
+import { Menu, Spin } from "antd";
 import * as Icons from "@ant-design/icons";
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import { useSession } from "next-auth/react";
-
+import { useSession } from "next-auth/react";
 import { MenuKeys } from "@/enums/menus";
 
 interface MenuItemProps {
@@ -70,7 +67,6 @@ const menuItems: MenuItemProps[] = [
         key: MenuKeys.cadastros_tipoEquipe,
         label: <Link href="/dashboard/tipoEquipe">Tipos de Equipes</Link>,
       },
-      // Terceiro nível dentro de "Cadastros" para "Checklist"
       {
         key: "cadastros_checklist",
         icon: <Icons.CheckSquareOutlined />,
@@ -94,7 +90,6 @@ const menuItems: MenuItemProps[] = [
           },
         ],
       },
-      // Adicione outros itens de Cadastros conforme necessário
     ],
   },
   {
@@ -108,68 +103,64 @@ const menuItems: MenuItemProps[] = [
       },
     ],
   },
-  // Adicione outros itens conforme necessário
 ];
 
-// // Função para filtrar os itens do menu com base nas permissões do usuário
-// const filterMenuItems = (
-//   items: MenuItem[],
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   permissions: Record<string, any>
-// ): MenuItem[] => {
-//   return items.reduce<MenuItem[]>((acc, item) => {
-//     // Verifica se o usuário tem a permissão necessária para o item
-//     if (item.permission && !permissions[item.permission]?.canView) {
-//       return acc;
-//     }
+const filterMenuItems = (
+  items: MenuItemProps[],
+  permissions: Record<string, { canView: boolean; menuKey?: string | null }>
+): MenuItemProps[] => {
+  return items.reduce<MenuItemProps[]>((acc, item) => {
+    const newItem = { ...item };
+    const permission = Object.values(permissions).find(
+      (perm) => perm.menuKey === newItem.key
+    );
 
-//     const newItem: MenuItem = { ...item };
+    if (newItem.children) {
+      newItem.children = filterMenuItems(newItem.children, permissions);
+      if (newItem.children.length > 0) {
+        acc.push(newItem);
+        return acc;
+      }
+    }
 
-//     // Se o item tiver filhos, filtre-os recursivamente
-//     if (newItem.children) {
-//       newItem.children = filterMenuItems(newItem.children, permissions);
-//       // Se após o filtro não houver filhos, não adiciona o item pai
-//       if (newItem.children.length === 0) {
-//         return acc;
-//       }
-//     }
+    if (permission?.canView) {
+      acc.push(newItem);
+    }
 
-//     acc.push(newItem);
-//     return acc;
-//   }, []);
-// };
+    return acc;
+  }, []);
+};
 
 export default function SideBar() {
   const path = usePathname();
-  // const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
 
-  // Filtra os itens do menu com base nas permissões do usuário
-  // const filteredItems = React.useMemo(() => {
-  //   if (!session?.user?.permissions) return [];
-  //   return filterMenuItems(menuItems, session.user.permissions);
-  // }, [session]);
+  if (status === "loading") {
+    return (
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
 
-  // Função para encontrar a chave ativa com base no caminho atual
+  const userPermissions = session?.user?.modulesPermissions || {};
+  const filteredMenuItems = filterMenuItems(menuItems, userPermissions);
+
   const findActiveKey = (
     items: MenuItemProps[],
     currentPath: string
   ): string | undefined => {
     for (const item of items) {
-      // Verifica se o item é uma ligação e se o caminho corresponde
       if (
         item.label &&
         React.isValidElement(item.label) &&
-        ((typeof item.label.props.href === "string" &&
-          (item.label.props.href === currentPath ||
-            currentPath.startsWith(`${item.label.props.href}/`))) ||
-          (typeof item.label.props.href === "object" &&
-            (item.label.props.href === currentPath ||
-              currentPath.startsWith(`${item.label.props.href}/`))))
+        typeof item.label.props.href === "string" &&
+        (item.label.props.href === currentPath ||
+          currentPath.startsWith(`${item.label.props.href}/`))
       ) {
         return item.key?.toString();
       }
 
-      // Se o item tiver filhos, verifica recursivamente
       if (item.children) {
         const childKey = findActiveKey(item.children, currentPath);
         if (childKey) return childKey;
@@ -178,33 +169,14 @@ export default function SideBar() {
     return undefined;
   };
 
-  // Função para encontrar a chave do menu pai com base no caminho atual
-  const findParentKey = (
-    items: MenuItemProps[],
-    currentPath: string
-  ): string | undefined => {
-    for (const item of items) {
-      if (item.children) {
-        const childKey = findActiveKey(item.children, currentPath);
-        if (childKey) {
-          return item.key?.toString();
-        }
-      }
-    }
-    return undefined;
-  };
-
-  const activeKey = findActiveKey(menuItems, path);
-  const openKey = findParentKey(menuItems, path);
+  const activeKey = findActiveKey(filteredMenuItems, path);
 
   return (
     <Menu
       mode="inline"
       selectedKeys={activeKey ? [activeKey] : []}
-      defaultOpenKeys={openKey ? [openKey] : []}
       style={{ height: "100%", borderRight: 0 }}
-      items={menuItems}
-      // theme="dark"
+      items={filteredMenuItems}
     />
   );
 }

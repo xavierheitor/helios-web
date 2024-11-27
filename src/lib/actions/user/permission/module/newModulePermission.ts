@@ -27,6 +27,8 @@ export async function newModulePermission(
   const rawData = {
     userId: formData.get("userId"),
     module: formData.get("module"),
+    menuKey: formData.get("menuKey"),
+    href: formData.get("href"),
     canView: formData.get("canView"),
     canCreate: formData.get("canCreate"),
     canEdit: formData.get("canEdit"),
@@ -36,6 +38,8 @@ export async function newModulePermission(
   const convertedData = {
     userId: rawData.userId ? Number(rawData.userId) : undefined,
     module: rawData.module ? String(rawData.module) : undefined,
+    menuKey: rawData.menuKey ? String(rawData.menuKey) : undefined,
+    href: rawData.href ? String(rawData.href) : undefined,
     canView: rawData.canView === "true",
     canCreate: rawData.canCreate === "true",
     canEdit: rawData.canEdit === "true",
@@ -55,14 +59,24 @@ export async function newModulePermission(
     };
   }
 
-  const { userId, module, canView, canCreate, canEdit, canDelete } =
-    validatedFields.data;
+  const {
+    userId,
+    module,
+    menuKey,
+    href,
+    canView,
+    canCreate,
+    canEdit,
+    canDelete,
+  } = validatedFields.data;
 
   try {
     await prisma?.userModulePermission.create({
       data: {
         userId,
         module,
+        menuKey,
+        href,
         canView,
         canCreate,
         canEdit,

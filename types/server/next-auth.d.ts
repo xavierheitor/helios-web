@@ -10,13 +10,10 @@ type modulesPermission = Record<
     canCreate: boolean;
     canEdit: boolean;
     canDelete: boolean;
+    menuKey?: string | null;
+    href?: string | null;
   }
 >;
-
-type menuPermission = {
-  key: string;
-  href: string;
-};
 
 declare module "next-auth" {
   interface User extends DefaultUser {
@@ -27,7 +24,6 @@ declare module "next-auth" {
 
     modulesPermissions?: modulesPermission;
     allowedContratos?: number[];
-    menuPermissions?: menuPermission[];
   }
 
   interface Session extends DefaultSession {
@@ -39,7 +35,6 @@ declare module "next-auth" {
 
       modulesPermissions?: modulesPermission;
       allowedContratos?: number[];
-      menuPermissions?: menuPermission[];
     };
   }
 }
@@ -52,6 +47,5 @@ declare module "next-auth/jwt" {
 
     modulesPermissions?: modulesPermission;
     allowedContratos?: number[];
-    menuPermissions?: menuPermission[];
   }
 }

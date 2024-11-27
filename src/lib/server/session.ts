@@ -67,6 +67,8 @@ export async function verifySession(): Promise<ExtendedSession | null> {
       .map((permission) => permission.contractId)
       .filter((id): id is number => id !== null && id !== undefined); // Filtra valores inválidos
 
+    console.log("session", session);
+
     // Retorna a sessão estendida com permissões e autenticação
     return {
       userId,

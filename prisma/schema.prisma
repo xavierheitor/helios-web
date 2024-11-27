@@ -26,7 +26,6 @@ model User {
 
   // Relacionamentos para permissões
   contractPermissions UserContractPermission[]
-  menuPermissions     UserMenuPermission[]
   modulePermission    UserModulePermission[]
 
   // Relacionamentos para contas e sessões do NextAuth
@@ -105,7 +104,9 @@ model UserModulePermission {
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  module String
+  module  String
+  menuKey String? @unique
+  href    String? @unique
 
   canView   Boolean @default(false)
   canCreate Boolean @default(false)
@@ -118,24 +119,6 @@ model UserModulePermission {
   deletedAt DateTime?
 
   @@unique([userId, module])
-}
-
-model UserMenuPermission {
-  id Int @id @default(autoincrement())
-
-  // Relacionamento com usuário
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  menuKey String
-  href    String
-
-  // Timestamp para criação
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
-
-  @@unique([userId, menuKey])
 }
 
 //------------------------- CADASTROS -------------------------

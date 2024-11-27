@@ -14,9 +14,9 @@ import {
 } from "antd";
 import { editModulePermission } from "@/lib/actions/user/permission/module/editModulePermission";
 import { newModulePermission } from "@/lib/actions/user/permission/module/newModulePermission";
-import { MODULES } from "@/enums/modules"; // Importar o enum MODULES
+import { MenuGroups } from "@/enums/menus"; // Importar o MenuGroups gerado
 
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 
 interface ModulePermissionsFormProps {
   modulePermission?: UserModulePermission | null;
@@ -58,6 +58,16 @@ const ModulePermissionsForm: React.FC<ModulePermissionsFormProps> = ({
     }
   }, [modulePermission, form, userId]);
 
+  const findMenuDetails = (module: string) => {
+    for (const group of Object.values(MenuGroups)) {
+      const menu = group.find((item) => item.module === module);
+      if (menu) {
+        return { href: menu.href, menuKey: menu.key };
+      }
+    }
+    return { href: "", menuKey: "" }; // Retorna valores padrão caso não encontre
+  };
+
   const onFinish: FormProps<ModulePermissionsFormValues>["onFinish"] = async (
     values
   ) => {
@@ -69,12 +79,16 @@ const ModulePermissionsForm: React.FC<ModulePermissionsFormProps> = ({
         ? editModulePermission
         : newModulePermission;
 
+      const { href, menuKey } = findMenuDetails(values.module);
+
       const data = new FormData();
       if (values.id) {
         data.append("id", values.id.toString());
       }
       data.append("userId", userId.toString());
       data.append("module", values.module);
+      data.append("menuKey", menuKey);
+      data.append("href", href);
       data.append("canView", values.canView.toString());
       data.append("canCreate", values.canCreate.toString());
       data.append("canEdit", values.canEdit.toString());
@@ -127,6 +141,12 @@ const ModulePermissionsForm: React.FC<ModulePermissionsFormProps> = ({
       }}
       disabled={loading}
     >
+      {modulePermission && (
+        <Form.Item name="id" hidden>
+          <Input type="hidden" />
+        </Form.Item>
+      )}
+
       <Form.Item name="userId" hidden>
         <Input type="hidden" />
       </Form.Item>
@@ -136,10 +156,14 @@ const ModulePermissionsForm: React.FC<ModulePermissionsFormProps> = ({
         rules={[{ required: true, message: "O módulo é obrigatório!" }]}
       >
         <Select placeholder="Selecione um módulo">
-          {Object.values(MODULES).map((module) => (
-            <Option key={module} value={module}>
-              {module}
-            </Option>
+          {Object.entries(MenuGroups).map(([group, menus]) => (
+            <OptGroup key={group} label={group}>
+              {menus.map((menu) => (
+                <Option key={menu.module} value={menu.module}>
+                  {menu.module}
+                </Option>
+              ))}
+            </OptGroup>
           ))}
         </Select>
       </Form.Item>
