@@ -4,17 +4,18 @@ import { fetchSWRUser } from "@/lib/actions/user/fetchSWRUser";
 import { Alert, Card, Modal, Spin, Table } from "antd";
 import useSWR, { Fetcher } from "swr";
 import { User, UserModulePermission } from "@prisma/client";
-import { fetchSWRContractPermissions } from "@/lib/actions/user/permission/fetchSWRContractPermissions";
+import { fetchSWRContractPermissions } from "@/lib/actions/user/permission/contract/fetchSWRContractPermissions";
 import CardActions from "@/components/CardActions/CardActions";
 import { ColumnsType } from "antd/es/table";
 import TableActionButton from "@/components/TableActionButton/TableActionButton";
 import { UserContractPermissionWithRelations } from "@/lib/utils/prismaTypes/userContractPermissionWithRelations";
-import { fetchSWRModulePermissions } from "@/lib/actions/user/permission/fetchSWRModulePermission";
+import { fetchSWRModulePermissions } from "@/lib/actions/user/permission/module/fetchSWRModulePermission";
 import { useState } from "react";
 import ContractPermissionsForm from "../ContractPermissionsForm";
 import ModulePermissionsForm from "../ModulePermissionsForm";
 import { handleDeleteConfirmation } from "@/components/HandleDelete/handleDelete";
-import { deleteUserContractPermission } from "@/lib/actions/user/permission/deleteContractPermission";
+import { deleteUserContractPermission } from "@/lib/actions/user/permission/contract/deleteContractPermission";
+import { deleteUserModulePermission } from "@/lib/actions/user/permission/module/deleteModulePermission";
 
 interface PageProps {
   params: {
@@ -89,6 +90,16 @@ const EditUserPermission: React.FC<PageProps> = ({ params }: PageProps) => {
 
   const handleContractDelete = (id: number) => {
     handleDeleteConfirmation(id, deleteUserContractPermission, contractReload, {
+      title: "Você tem certeza que deseja deletar esta permissao?",
+      content: "Esta ação é irreversível.",
+      okText: "Sim",
+      cancelText: "Não",
+      okType: "danger",
+    });
+  };
+
+  const handleModuleDelete = (id: number) => {
+    handleDeleteConfirmation(id, deleteUserModulePermission, moduleReload, {
       title: "Você tem certeza que deseja deletar esta permissao?",
       content: "Esta ação é irreversível.",
       okText: "Sim",
@@ -213,7 +224,13 @@ const EditUserPermission: React.FC<PageProps> = ({ params }: PageProps) => {
     {
       title: "Ações",
       key: "actions",
-      render: (_, record) => <TableActionButton module="permissions" />,
+      render: (_, record) => (
+        <TableActionButton
+          module="permissions"
+          onEdit={() => handleOpenModal("module", record)}
+          onDelete={() => handleModuleDelete(record.id)}
+        />
+      ),
       width: 150,
     },
   ];
@@ -326,7 +343,7 @@ const EditUserPermission: React.FC<PageProps> = ({ params }: PageProps) => {
           />
         ) : (
           <ModulePermissionsForm
-            modulePermissions={formData as UserModulePermission}
+            modulePermission={formData as UserModulePermission}
             onSuccess={handleSuccess}
             userId={user?.id ?? 0}
           />

@@ -1412,3 +1412,63 @@
 {"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:49:30"}
 {"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:49:30"}
 {"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:49:30"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 21:57:29"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 21:57:29"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:57:29"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:57:29"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:57:29"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:57:29"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 21:58:00"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 21:58:00"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:58:00"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:58:00"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:58:00"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:58:00"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 21:58:10"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 21:58:10"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:58:10"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:58:10"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:58:11"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:58:11"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 21:58:27"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 21:58:27"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:58:28"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:58:28"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:58:28"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:58:28"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 21:58:44"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 21:58:44"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:58:44"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:58:44"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:58:44"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:58:44"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 21:58:49"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 21:58:49"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:58:49"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:58:49"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:58:49"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:58:49"}
+{"formData":{},"level":"info","message":"newModulePermission action called","timestamp":"2024-11-26 21:58:59"}
+{"level":"info","message":"Permissão de módulo criada com sucesso","timestamp":"2024-11-26 21:58:59"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 21:58:59"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 21:58:59"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:58:59"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:58:59"}
+{"level":"info","message":"deleteUserModulePermission action called for id 2","timestamp":"2024-11-26 21:59:03"}
+{"level":"info","message":"Permissão de módulo 2 deletada pelo usuário 1","timestamp":"2024-11-26 21:59:03"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 21:59:03"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 21:59:03"}
+{"level":"info","message":"fetchUser action called for userId 1","timestamp":"2024-11-26 22:01:28"}
+{"level":"info","message":"Usuário 1 buscou o usuário id 1","timestamp":"2024-11-26 22:01:28"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 22:01:28"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 22:01:28"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 22:01:28"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 22:01:29"}
+{"formData":{},"level":"info","message":"newModulePermission action called","timestamp":"2024-11-26 22:01:39"}
+{"level":"info","message":"Permissão de módulo criada com sucesso","timestamp":"2024-11-26 22:01:39"}
+{"level":"info","message":"fetchContractPermissions action called for userId userContract-1","timestamp":"2024-11-26 22:01:39"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userContract-1","timestamp":"2024-11-26 22:01:39"}
+{"level":"info","message":"fetchModulePermissions action called for userId userModule-1","timestamp":"2024-11-26 22:01:40"}
+{"level":"info","message":"Usuário 1 buscou as permissões de contrato do usuário id userModule-1","timestamp":"2024-11-26 22:01:40"}
+{"formData":{},"level":"info","message":"newModulePermission action called","timestamp":"2024-11-26 22:01:44"}
+{"error":{"clientVersion":"5.22.0","code":"P2002","meta":{"modelName":"UserModulePermission","target":"UserModulePermission_userId_module_key"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Tentativa de duplicação de permissão","timestamp":"2024-11-26 22:01:44"}

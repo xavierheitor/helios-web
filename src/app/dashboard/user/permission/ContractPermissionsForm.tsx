@@ -15,8 +15,8 @@ import {
 } from "antd";
 import useSWR from "swr";
 import fetchSWRContratos from "@/lib/actions/contratos/fetchSWRContracts";
-import { editContractPermission } from "@/lib/actions/user/permission/editContractPermission";
-import { newContractPermission } from "@/lib/actions/user/permission/newContractPermission";
+import { editContractPermission } from "@/lib/actions/user/permission/contract/editContractPermission";
+import { newContractPermission } from "@/lib/actions/user/permission/contract/newContractPermission";
 const { Option } = Select;
 
 interface ContractPermissionsFormProps {
