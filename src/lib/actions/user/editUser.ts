@@ -7,7 +7,7 @@ import { User } from "@prisma/client";
 
 import { ActionResult } from "../../../../types/actions/action-result";
 import { FormState } from "../../../../types/actions/form-state";
-import { UserFormSchema } from "../formSchemas/userFormSchema";
+import { UserFormSchema } from "../aa-formSchemas/userFormSchema";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { MenuKeys } from "@/enums/menus";
 import { PERMISSIONS } from "@/enums/permissions";

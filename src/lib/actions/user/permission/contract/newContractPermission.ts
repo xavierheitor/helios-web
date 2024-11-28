@@ -4,7 +4,7 @@ import { logger } from "@/lib/common/logger";
 import { ActionResult } from "../../../../../../types/actions/action-result";
 import { FormState } from "../../../../../../types/actions/form-state";
 import { verifySession } from "@/lib/server/session";
-import { ContractPermissionsFormSchema } from "../../../formSchemas/userContractPermission";
+import { ContractPermissionsFormSchema } from "../../../aa-formSchemas/userContractPermission";
 
 export async function newContractPermission(
   state: FormState,

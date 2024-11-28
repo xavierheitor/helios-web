@@ -5,7 +5,7 @@ import prisma from "@/lib/common/prisma";
 import { FormState } from "../../../../types/actions/form-state";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { MenuKeys } from "@/enums/menus";
-import { ContractorFormSchema } from "../formSchemas/contratante";
+import { ContractorFormSchema } from "../aa-formSchemas/contratante";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { PERMISSIONS } from "@/enums/permissions";
 
