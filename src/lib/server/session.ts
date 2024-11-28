@@ -10,6 +10,17 @@ interface ExtendedSession {
   userId: number;
   allowedContratos: Partial<UserContractPermission>[];
   allowedContratosIds: number[];
+  modulesPermissions: Record<
+    string,
+    {
+      canView: boolean;
+      canCreate: boolean;
+      canEdit: boolean;
+      canDelete: boolean;
+      menuKey?: string | null;
+      href?: string | null;
+    }
+  >;
   isAuth: boolean;
 }
 
@@ -40,7 +51,7 @@ export async function verifySession(): Promise<ExtendedSession | null> {
     // Define o ID do usuário no contexto do Prisma
     setCurrentUserId(userId);
 
-    // Buscar permissões do usuário no banco de dados
+    // Buscar permissões do usuário no banco de dados - Contratos
     const contractPermissions = await prisma.userContractPermission.findMany({
       where: { userId },
       select: {
@@ -52,7 +63,7 @@ export async function verifySession(): Promise<ExtendedSession | null> {
       },
     });
 
-    // Processa as permissões para um formato simplificado
+    // Processa as permissões de contratos para um formato simplificado
     const allowedContratos: Partial<UserContractPermission>[] =
       contractPermissions.map((permission) => ({
         contractId: permission.contractId,
@@ -65,15 +76,60 @@ export async function verifySession(): Promise<ExtendedSession | null> {
     // Extrai os IDs dos contratos permitidos
     const allowedContratosIds = contractPermissions
       .map((permission) => permission.contractId)
-      .filter((id): id is number => id !== null && id !== undefined); // Filtra valores inválidos
+      .filter((id): id is number => id !== null && id !== undefined);
 
-    console.log("session", session);
+    // Buscar permissões do usuário no banco de dados - Módulos
+    const modulePermissions = await prisma.userModulePermission.findMany({
+      where: { userId },
+      select: {
+        module: true,
+        canCreate: true,
+        canEdit: true,
+        canDelete: true,
+        canView: true,
+        menuKey: true,
+        href: true,
+      },
+    });
+
+    // Processa as permissões de módulos para um formato simplificado
+    const modulesPermissions = modulePermissions.reduce(
+      (acc, permission) => {
+        acc[permission.module] = {
+          canCreate: permission.canCreate,
+          canEdit: permission.canEdit,
+          canDelete: permission.canDelete,
+          canView: permission.canView,
+          menuKey: permission.menuKey,
+          href: permission.href,
+        };
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          canView: boolean;
+          canCreate: boolean;
+          canEdit: boolean;
+          canDelete: boolean;
+          menuKey?: string | null;
+          href?: string | null;
+        }
+      >
+    );
+
+    console.log("Session verified:", {
+      userId,
+      allowedContratos,
+      modulesPermissions,
+    });
 
     // Retorna a sessão estendida com permissões e autenticação
     return {
       userId,
       allowedContratos,
       allowedContratosIds,
+      modulesPermissions,
       isAuth: true,
     };
   } catch (error) {
