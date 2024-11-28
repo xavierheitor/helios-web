@@ -3,17 +3,24 @@
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
 
-import { verifySession } from "@/lib/server/session";
 import { SWRError } from "@/lib/common/errors/SWRError";
 import { User } from "@prisma/client";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
+import { MenuKeys } from "@/enums/menus";
+import { PERMISSIONS } from "@/enums/permissions";
 
 export async function fetchSWRUser(userId: string): Promise<Partial<User>> {
   logger.info(`fetchUser action called for userId ${userId}`);
 
-  const session = await verifySession();
-  if (!session?.isAuth) {
-    logger.error("Usuário não autenticado");
-    throw new SWRError("Usuário não autenticado");
+  // **Verificação de Permissões**
+  const permissionCheck = await checkUserPermissions(
+    MenuKeys.usuarios_list,
+    PERMISSIONS.VIEW
+  );
+
+  if (!permissionCheck.allowed) {
+    logger.error("Permissão negada:", permissionCheck.message);
+    throw new SWRError(`Permissao negada: ${permissionCheck.message}`);
   }
 
   const parsedUserId = parseInt(userId, 10);
@@ -37,12 +44,14 @@ export async function fetchSWRUser(userId: string): Promise<Partial<User>> {
 
     if (!user) {
       logger.error(
-        `Usuário ${session?.userId} tentou buscar um usuário inexistente`
+        `Usuário ${permissionCheck?.userId} tentou buscar um usuário inexistente`
       );
       throw new SWRError("Usuário não encontrado");
     }
 
-    logger.info(`Usuário ${session?.userId} buscou o usuário id ${userId}`);
+    logger.info(
+      `Usuário ${permissionCheck?.userId} buscou o usuário id ${userId}`
+    );
 
     return user;
   } catch (error: unknown) {

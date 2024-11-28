@@ -7,8 +7,10 @@ import { User } from "@prisma/client";
 
 import { ActionResult } from "../../../../types/actions/action-result";
 import { FormState } from "../../../../types/actions/form-state";
-import { verifySession } from "@/lib/server/session";
 import { UserFormSchema } from "../formSchemas/userFormSchema";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
+import { MenuKeys } from "@/enums/menus";
+import { PERMISSIONS } from "@/enums/permissions";
 
 /**
  * Edita um User existente.
@@ -22,13 +24,17 @@ export async function editUser(
 ): Promise<ActionResult> {
   logger.info("editUser action called", { formData });
 
-  // **Verificação de Autenticação**
-  const session = await verifySession();
-  if (!session?.isAuth) {
-    logger.error("Usuário não autenticado");
+  // **Verificação de Permissões**
+  const permissionCheck = await checkUserPermissions(
+    MenuKeys.usuarios_list,
+    PERMISSIONS.EDIT
+  );
+
+  if (!permissionCheck.allowed) {
+    logger.error("Permissão negada:", permissionCheck.message);
     return {
       success: false,
-      message: "Usuário não autenticado",
+      message: permissionCheck.message,
     };
   }
 

@@ -4,17 +4,24 @@ import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { verifySession } from "@/lib/server/session";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
+import { PERMISSIONS } from "@/enums/permissions";
+import { MenuKeys } from "@/enums/menus";
 
 export async function deleteUser(id: number): Promise<ActionResult> {
   logger.info(`deleteUser action called for id ${id}`);
 
-  // **Verificação de Autenticação**
-  const session = await verifySession();
-  if (!session?.isAuth) {
-    logger.error("Usuário não autenticado");
+  // **Verificação de Permissões**
+  const permissionCheck = await checkUserPermissions(
+    MenuKeys.usuarios_list,
+    PERMISSIONS.DELETE
+  );
+
+  if (!permissionCheck.allowed) {
+    logger.error("Permissão negada:", permissionCheck.message);
     return {
       success: false,
-      message: "Usuário não autenticado",
+      message: permissionCheck.message,
     };
   }
 
@@ -37,7 +44,7 @@ export async function deleteUser(id: number): Promise<ActionResult> {
     await prisma.softDelete("user", { id });
 
     logger.info(
-      `User ${id} deletado logicamente pelo usuário ${session.userId}`
+      `User ${id} deletado logicamente pelo usuário ${permissionCheck.userId}`
     );
     return {
       success: true,

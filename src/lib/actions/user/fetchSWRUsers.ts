@@ -1,18 +1,25 @@
 "use server";
 
 import { logger } from "@/lib/common/logger";
-import { verifySession } from "@/lib/server/session";
 import { User } from "@prisma/client";
 import prisma from "@/lib/common/prisma";
 import { SWRError } from "@/lib/common/errors/SWRError";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
+import { MenuKeys } from "@/enums/menus";
+import { PERMISSIONS } from "@/enums/permissions";
 
 export async function fetchSWRUsers(): Promise<Partial<User>[]> {
   logger.info("fetchUsers action called!");
 
-  const session = await verifySession();
-  if (!session?.isAuth) {
-    logger.error("Usuário não autenticado");
-    throw new SWRError("Usuário não autenticado");
+  // **Verificação de Permissões**
+  const permissionCheck = await checkUserPermissions(
+    MenuKeys.usuarios_list,
+    PERMISSIONS.VIEW
+  );
+
+  if (!permissionCheck.allowed) {
+    logger.error("Permissão negada:", permissionCheck.message);
+    throw new SWRError(`Permissao negada: ${permissionCheck.message}`);
   }
 
   try {
@@ -24,7 +31,9 @@ export async function fetchSWRUsers(): Promise<Partial<User>[]> {
       },
     });
 
-    logger.info(`Usuário ${session?.userId} buscou ${users.length} usuários`);
+    logger.info(
+      `Usuário ${permissionCheck?.userId} buscou ${users.length} usuários`
+    );
 
     return users;
   } catch (error: unknown) {
