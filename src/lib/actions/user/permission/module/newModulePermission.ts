@@ -5,7 +5,7 @@ import prisma from "@/lib/common/prisma";
 import { FormState } from "../../../../../../types/actions/form-state";
 import { ActionResult } from "../../../../../../types/actions/action-result";
 import { verifySession } from "@/lib/server/session";
-import { ModulePermissionsFormSchema } from "../../../aa-formSchemas/userModulePermission";
+import { ModulePermissionsFormSchema } from "../../../../utils/formSchemas/userModulePermission";
 
 export async function newModulePermission(
   state: FormState,

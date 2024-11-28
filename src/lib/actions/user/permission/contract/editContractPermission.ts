@@ -6,7 +6,7 @@ import prisma from "@/lib/common/prisma";
 import { FormState } from "../../../../../../types/actions/form-state";
 import { ActionResult } from "../../../../../../types/actions/action-result";
 import { verifySession } from "@/lib/server/session";
-import { ContractPermissionsFormSchema } from "../../../aa-formSchemas/userContractPermission";
+import { ContractPermissionsFormSchema } from "../../../../utils/formSchemas/userContractPermission";
 
 /**
  * Edita uma Permissao existente.

@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { FormState } from "../../../../types/actions/form-state";
 import { verifySession } from "@/lib/server/session";
-import { UserFormSchema } from "../aa-formSchemas/userFormSchema";
+import { UserFormSchema } from "../../utils/formSchemas/userFormSchema";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { MenuKeys } from "@/enums/menus";
 import { PERMISSIONS } from "@/enums/permissions";
