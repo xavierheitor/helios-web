@@ -1,18 +1,26 @@
 "use server";
 
+import { MenuKeys } from "@/enums/menus";
+import { PERMISSIONS } from "@/enums/permissions";
 import { SWRError } from "@/lib/common/errors/SWRError";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { verifySession } from "@/lib/server/session";
 import { Contractor } from "@prisma/client";
 
 export async function fetchSWRContratante(id: string): Promise<Contractor> {
   logger.info(`fetchSWRContratante action called for id ${id}`);
 
-  const session = await verifySession();
-  if (!session?.isAuth) {
-    logger.error("Usuário não autenticado");
-    throw new SWRError("Usuário não autenticado");
+  // **Verificação de Permissões**
+  const permissionCheck = await checkUserPermissions(
+    MenuKeys.cadastros_contratante,
+    PERMISSIONS.VIEW
+  );
+
+  if (!permissionCheck.allowed) {
+    logger.error("Permissão negada:", permissionCheck.message);
+    throw new SWRError(`Usuário sem permissao para realizar esta atividade`);
   }
 
   const parsedId = parseInt(id, 10);
@@ -30,12 +38,14 @@ export async function fetchSWRContratante(id: string): Promise<Contractor> {
 
     if (!contratante) {
       logger.error(
-        `Usuário ${session?.userId} tentou buscar um contratante inexistente`
+        `Usuário ${permissionCheck?.userId} tentou buscar um contratante inexistente`
       );
       throw new SWRError("Contratante não encontrado");
     }
 
-    logger.info(`Usuário ${session?.userId} buscou o contratante id ${id}`);
+    logger.info(
+      `Usuário ${permissionCheck?.userId} buscou o contratante id ${id}`
+    );
 
     return contratante;
   } catch (error: unknown) {

@@ -1,7 +1,10 @@
 "use server";
+import { MenuKeys } from "@/enums/menus";
+import { PERMISSIONS } from "@/enums/permissions";
 import { SWRError } from "@/lib/common/errors/SWRError";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 
 import { verifySession } from "@/lib/server/session";
 import { Contract } from "@prisma/client";
@@ -9,18 +12,22 @@ import { Contract } from "@prisma/client";
 export default async function fetchSWRContratos(): Promise<Contract[]> {
   logger.info("fetchSWRContratos action called!");
 
-  // **Verificação de Autenticação**
-  const session = await verifySession();
-  if (!session?.isAuth) {
-    logger.error("Usuário não autenticado");
-    throw new SWRError("Usuário não autenticado");
+  // **Verificação de Permissões**
+  const permissionCheck = await checkUserPermissions(
+    MenuKeys.cadastros_contrato,
+    PERMISSIONS.VIEW
+  );
+
+  if (!permissionCheck.allowed) {
+    logger.error("Permissão negada:", permissionCheck.message);
+    throw new SWRError(permissionCheck.message);
   }
 
   try {
     const contracts = await prisma.contract.findMany();
 
     logger.info(
-      `Usuário ${session?.userId} buscou  ${contracts.length} contratos`
+      `Usuário ${permissionCheck?.userId} buscou  ${contracts.length} contratos`
     );
 
     return contracts;

@@ -42,7 +42,7 @@ export async function checkUserPermissions(
 
     return {
       allowed: false,
-      message: `Você não tem permissão para executar esta ação: ${action} no módulo ${moduleKey}.`,
+      message: `Você não tem permissão para executar esta ação.`,
     };
   }
 
