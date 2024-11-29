@@ -58,6 +58,7 @@ export async function newContract(
         initialDate: initialDate,
         finalDate: finalDate,
         contractorId: contractorId,
+        createdByUser: permissionCheck.userId,
       },
     });
 

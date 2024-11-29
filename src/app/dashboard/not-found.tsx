@@ -5,7 +5,6 @@ import { Result, Button } from "antd";
 import Link from "next/link";
 
 export default function Custom404() {
-  console.log("Custom404");
   return (
     <div
       style={{

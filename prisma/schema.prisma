@@ -34,6 +34,42 @@ model User {
 
   // Relacionamento com os logs de ação
   ActionLog ActionLog[]
+
+  Contractor Contractor[]
+
+  Contract Contract[]
+
+  Base Base[]
+
+  Employee Employee[]
+
+  Role Role[]
+
+  Vehicle Vehicle[]
+
+  VehicleType VehicleType[]
+
+  Team Team[]
+
+  TeamType TeamType[]
+
+  Device Device[]
+
+  DeviceContractPermissions DeviceContractPermissions[]
+
+  ChecklistType ChecklistType[]
+
+  Answer Answer[]
+
+  Question Question[]
+
+  Checklist Checklist[]
+
+  ChecklistAssociatedQuestion ChecklistAssociatedQuestion[]
+
+  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
+
+  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
 }
 
 model Account {
@@ -132,6 +168,10 @@ model Contractor {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   contracts Contract[]
 }
 
@@ -150,6 +190,10 @@ model Contract {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   bases       Base[] // Bases associadas
   permissions UserContractPermission[] // Permissões associadas
   employees   Employee[] // Funcionários associados
@@ -166,6 +210,10 @@ model Base {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
+
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   contractId Int
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
@@ -193,6 +241,10 @@ model Employee {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   contractId Int
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
@@ -206,6 +258,10 @@ model Role {
   description String?
   baseSalary  Float?
   deletedAt   DateTime?
+
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   employees Employee[]
 }
@@ -223,6 +279,10 @@ model Vehicle {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   contractId Int
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
@@ -239,6 +299,10 @@ model VehicleType {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   vehicles Vehicle[]
 
   ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
@@ -251,6 +315,10 @@ model Team {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
+
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   contractId Int
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
@@ -268,6 +336,10 @@ model TeamType {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   teams Team[]
 
   ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
@@ -284,6 +356,10 @@ model Device {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   DeviceContractPermissions DeviceContractPermissions[]
 }
 
@@ -295,6 +371,10 @@ model DeviceContractPermissions {
 
   contractId Int
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -314,6 +394,10 @@ model ChecklistType {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   Answer Answer[]
 
   Question Question[]
@@ -329,6 +413,10 @@ model Answer {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   checklistTypeId Int
   checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
 }
@@ -340,6 +428,10 @@ model Question {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
+
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   checklistTypeId Int
   checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
@@ -359,6 +451,10 @@ model Checklist {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   associatedQuestions ChecklistAssociatedQuestion[]
 
   ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
@@ -375,6 +471,10 @@ model ChecklistAssociatedQuestion {
   questionId Int
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   @@unique([checklistId, questionId])
 }
 
@@ -387,6 +487,10 @@ model ChecklistVehicleTypeAssossiation {
   vehicleTypeId Int
   vehicleType   VehicleType @relation(fields: [vehicleTypeId], references: [id], onDelete: Cascade)
 
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
   @@unique([vehicleTypeId])
 }
 
@@ -398,6 +502,10 @@ model ChecklistTeamTypeAssossiation {
 
   teamTypeId Int
   teamType   TeamType @relation(fields: [teamTypeId], references: [id], onDelete: Cascade)
+
+  // Criado por
+  createdByUser Int? // ID do usuário que criou esta permissão
+  createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   @@unique([teamTypeId])
 }

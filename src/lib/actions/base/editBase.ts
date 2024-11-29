@@ -2,25 +2,23 @@
 
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
-
 import { FormState } from "../../../../types/actions/form-state";
 import { ActionResult } from "../../../../types/actions/action-result";
-import { verifySession } from "@/lib/server/session";
-import { ContractorFormSchema } from "../../utils/formSchemas/contratante";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { MenuKeys } from "@/enums/menus";
 import { PERMISSIONS } from "@/enums/permissions";
+import { BaseFormSchema } from "@/lib/utils/formSchemas/baseFormSchema";
 
-export async function newContratante(
+export async function editBase(
   formState: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info("newContratante action called", { formData });
+  logger.info("editBase action called", { formData });
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_contratante,
-    PERMISSIONS.CREATE
+    MenuKeys.cadastros_base,
+    PERMISSIONS.EDIT
   );
 
   if (!permissionCheck.allowed) {
@@ -31,11 +29,20 @@ export async function newContratante(
     };
   }
 
+  const id = parseInt(formData.get("id")?.toString() || "0");
+  if (isNaN(id) || id <= 0) {
+    logger.error(`ID da Base inválido: ${formData.get("id")}`);
+    return {
+      success: false,
+      message: "ID inválido",
+    };
+  }
+
   // **Validação dos Campos do Formulário**
-  const validatedFields = ContractorFormSchema.safeParse({
+  const validatedFields = BaseFormSchema.safeParse({
+    id: formData.get("id"),
     name: formData.get("name"),
-    cnpj: formData.get("cnpj"),
-    state: formData.get("state"),
+    contractId: formData.get("contractId"),
   });
 
   if (!validatedFields.success) {
@@ -48,37 +55,38 @@ export async function newContratante(
     };
   }
 
-  const { name, cnpj, state } = validatedFields.data;
+  const { name, contractId } = validatedFields.data;
 
   try {
-    const newContratante = await prisma.contractor.create({
+    const editedBase = await prisma.base.update({
+      where: {
+        id: id,
+      },
       data: {
         name: name,
-        cnpj: cnpj,
-        state: state,
-        createdByUser: permissionCheck.userId,
+        contractId: contractId,
       },
     });
 
-    logger.info(`Contratante ${newContratante.id} criado com sucesso`);
+    logger.info(`Base ${id} editada por ${permissionCheck.userId}`);
 
     return {
       success: true,
-      message: "Contratante criado com sucesso",
+      message: "Base editada com sucesso",
+      data: editedBase,
     };
   } catch (error: unknown) {
-    // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao criar contratante: ${error.message}`, { error });
+      logger.error(`Erro ao editar base: ${error.message}`, { error });
       return {
         success: false,
         message: error.message,
       };
     } else {
-      logger.error("Erro desconhecido ao criar contratante", { error });
+      logger.error("Erro desconhecido ao editar base", { error });
       return {
         success: false,
-        message: "Erro desconhecido ao criar contratante",
+        message: "Erro desconhecido ao editar base",
       };
     }
   }

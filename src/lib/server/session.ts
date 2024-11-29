@@ -5,6 +5,7 @@ import { UserContractPermission } from "@prisma/client";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma, { setCurrentUserId } from "@/lib/common/prisma";
 import { redirect } from "next/navigation";
+import { logger } from "../common/logger";
 
 interface ExtendedSession {
   userId: number;
@@ -118,7 +119,7 @@ export async function verifySession(): Promise<ExtendedSession | null> {
       >
     );
 
-    console.log("Session verified:", {
+    logger.info("Session verified:", {
       userId,
       allowedContratos,
       modulesPermissions,
