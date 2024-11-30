@@ -3,6 +3,14 @@
 import type { DefaultSession, DefaultUser } from "next-auth";
 import type { JWT as DefaultJWT } from "next-auth/jwt";
 
+type ContractPermission = {
+  contractId: number;
+  canView: boolean;
+  canCreate: boolean;
+  canEdit: boolean;
+  canDelete: boolean;
+};
+
 type modulesPermission = Record<
   string,
   {
@@ -23,7 +31,8 @@ declare module "next-auth" {
     email?: string | null;
 
     modulesPermissions?: modulesPermission;
-    allowedContratos?: number[];
+    allowedContracts?: ContractPermission[]; // Array com permissões detalhadas
+    allowedContractsId?: number[]; // Apenas os IDs permitidos
   }
 
   interface Session extends DefaultSession {
@@ -34,7 +43,8 @@ declare module "next-auth" {
       username: string;
 
       modulesPermissions?: modulesPermission;
-      allowedContratos?: number[];
+      allowedContracts?: ContractPermission[];
+      allowedContractsId?: number[];
     };
   }
 }
@@ -46,6 +56,7 @@ declare module "next-auth/jwt" {
     email?: string | null;
 
     modulesPermissions?: modulesPermission;
-    allowedContratos?: number[];
+    allowedContracts?: ContractPermission[];
+    allowedContractsId?: number[];
   }
 }

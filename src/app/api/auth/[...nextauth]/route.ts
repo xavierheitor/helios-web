@@ -1,9 +1,7 @@
-// src/app/api/auth/[...nextauth]/route.ts
-
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma, { setCurrentUserId } from "@/lib/common/prisma"; // Adicionado o método setCurrentUserId
+import prisma, { setCurrentUserId } from "@/lib/common/prisma";
 import bcrypt from "bcrypt";
 import type { NextAuthOptions, User } from "next-auth";
 import type { JWT as DefaultJWT } from "next-auth/jwt";
@@ -30,25 +28,16 @@ export const authOptions: NextAuthOptions = {
 
         // Buscar o usuário no banco de dados pelo username
         const user = await prisma.user.findFirst({
-          where: {
-            username: username,
-          },
+          where: { username, deletedAt: null }, // Adicionado filtro para soft delete
         });
 
-        if (!user) {
-          throw new Error("Usuário não encontrado");
-        }
-
-        if (!user.password) {
+        if (!user) throw new Error("Usuário não encontrado");
+        if (!user.password)
           throw new Error("Usuário não tem uma senha configurada");
-        }
 
-        // Comparar a senha fornecida com a senha armazenada (criptografada)
+        // Comparar a senha fornecida com a senha armazenada
         const isValid = await bcrypt.compare(password, user.password);
-
-        if (!isValid) {
-          throw new Error("Senha incorreta");
-        }
+        if (!isValid) throw new Error("Senha incorreta");
 
         // Retornar os dados do usuário
         return {
@@ -62,8 +51,8 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60, // 1 hora em segundos
-    updateAge: 30 * 60, // Atualiza a sessão a cada 30 minutos
+    maxAge: 60 * 60, // 1 hora
+    updateAge: 30 * 60, // Atualizar sessão a cada 30 minutos
   },
   callbacks: {
     async jwt({
@@ -73,37 +62,51 @@ export const authOptions: NextAuthOptions = {
       token: DefaultJWT;
       user: User;
     }): Promise<DefaultJWT> {
-      // Se houver um usuário, adicione os dados dele ao token
       if (user) {
         token.id = user.id;
         token.username = user.username;
         token.email = user.email ?? "";
 
-        // Buscar permissões do usuário no modelo userContratoPermission
-        const contratoPermitions = await prisma.userContractPermission.findMany(
-          {
+        // Buscar permissões de contratos
+        const contratoPermissions =
+          await prisma.userContractPermission.findMany({
             where: {
               userId: parseInt(user.id, 10),
+              deletedAt: null, // Ignorar registros removidos logicamente
             },
-          }
-        );
-        // Extrair contratos permitidos
-        const allowedContratos: number[] = contratoPermitions.map(
-          (permission) => permission.contractId
-        );
-        token.allowedContratos = allowedContratos;
+            select: {
+              contractId: true,
+              canView: true,
+              canCreate: true,
+              canEdit: true,
+              canDelete: true,
+            },
+          });
 
-        // Buscar permissões do usuário no modelo permission
+        token.allowedContractsId = contratoPermissions.map(
+          (perm) => perm.contractId
+        ); // IDs permitidos
+        token.allowedContracts = contratoPermissions; // Permissões detalhadas
+
+        // Buscar permissões de módulos
         const userPermissions = await prisma.userModulePermission.findMany({
           where: {
             userId: parseInt(user.id, 10),
+            deletedAt: null, // Ignorar registros removidos logicamente
+          },
+          select: {
+            module: true,
+            canView: true,
+            canCreate: true,
+            canEdit: true,
+            canDelete: true,
+            menuKey: true,
+            href: true,
           },
         });
 
-        // Estruturar as permissões em um objeto para facilitar o acesso no frontend
         token.modulesPermissions = userPermissions.reduce((acc, perm) => {
-          const key = perm.module; // Removido contratoId das chaves
-          acc[key] = {
+          acc[perm.module] = {
             canView: perm.canView,
             canCreate: perm.canCreate,
             canEdit: perm.canEdit,
@@ -116,20 +119,20 @@ export const authOptions: NextAuthOptions = {
 
         return token;
       }
+
       return token;
     },
     async session({ session, token }: { session: Session; token: DefaultJWT }) {
-      // Adicione o ID e username do usuário à sessão
       if (session.user) {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.email = token.email as string;
-        session.user.allowedContratos =
-          (token.allowedContratos as number[]) || [];
+        session.user.allowedContractsId = token.allowedContractsId as number[];
+        session.user.allowedContracts = token.allowedContracts || [];
         session.user.modulesPermissions = token.modulesPermissions || {};
 
-        // Define o ID do usuário logado no Prisma
-        setCurrentUserId(parseInt(token.id as string, 10)); // Integração com o ActionLog
+        // Define o ID do usuário logado no Prisma para logs
+        setCurrentUserId(parseInt(token.id as string, 10));
       }
       return session;
     },
@@ -142,9 +145,9 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
-    error: "/login", // Redireciona para a página de login em caso de erro
+    error: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET, // Defina uma variável de ambiente para a chave secreta do NextAuth
+  secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
 };
 

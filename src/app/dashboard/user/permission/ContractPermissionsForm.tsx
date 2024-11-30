@@ -17,6 +17,7 @@ import useSWR from "swr";
 import fetchSWRContratos from "@/lib/actions/contratos/fetchSWRContracts";
 import { editContractPermission } from "@/lib/actions/user/permission/contract/editContractPermission";
 import { newContractPermission } from "@/lib/actions/user/permission/contract/newContractPermission";
+import fetchSWRAllContratos from "@/lib/actions/contratos/fetchSWRAllContracts";
 const { Option } = Select;
 
 interface ContractPermissionsFormProps {
@@ -50,7 +51,7 @@ const ContractPermissionsForm: React.FC<ContractPermissionsFormProps> = ({
     data: contratos,
     error: errorContratos,
     isLoading: loadingContratos,
-  } = useSWR("contratos", fetchSWRContratos);
+  } = useSWR("contratos", fetchSWRAllContratos);
 
   useEffect(() => {
     if (contractPermissions) {

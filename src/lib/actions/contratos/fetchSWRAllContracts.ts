@@ -8,7 +8,7 @@ import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 
 import { Contract } from "@prisma/client";
 
-export default async function fetchSWRContratos(): Promise<Contract[]> {
+export default async function fetchSWRAllContratos(): Promise<Contract[]> {
   logger.info("fetchSWRContratos action called!");
 
   // **Verificação de Permissões**
@@ -23,13 +23,7 @@ export default async function fetchSWRContratos(): Promise<Contract[]> {
   }
 
   try {
-    const contracts = await prisma.contract.findMany({
-      where: {
-        id: {
-          in: permissionCheck.allowedContractsId,
-        },
-      },
-    });
+    const contracts = await prisma.contract.findMany();
 
     logger.info(
       `Usuário ${permissionCheck?.userId} buscou  ${contracts.length} contratos`

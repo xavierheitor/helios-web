@@ -38,6 +38,19 @@ export async function editContract(
     };
   }
 
+  // **Verificação de Permissão no Contrato**
+  const contractPermission = permissionCheck.allowedContracts?.find(
+    (contract) => contract.contractId === id && contract.canEdit
+  );
+
+  if (!contractPermission) {
+    logger.error(`Usuário não tem permissão para editar o contrato ${id}`);
+    return {
+      success: false,
+      message: "Você não tem permissão para editar este contrato.",
+    };
+  }
+
   // **Validação dos Campos do Formulário**
   const validatedFields = ContractFormSchema.safeParse({
     number: formData.get("number"),

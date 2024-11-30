@@ -22,6 +22,18 @@ export async function deleteContract(id: number): Promise<ActionResult> {
       message: permissionCheck.message,
     };
   }
+  // **Verificação de Permissões no Contrato**
+  const contractPermission = permissionCheck.allowedContracts?.find(
+    (contract) => contract.contractId === id && contract.canDelete
+  );
+
+  if (!contractPermission) {
+    logger.error(`Usuário não tem permissão para deletar o contrato ${id}`);
+    return {
+      success: false,
+      message: "Você não tem permissão para deletar este contrato.",
+    };
+  }
 
   try {
     const contract = await prisma.contract.findUnique({ where: { id } });
