@@ -4,12 +4,12 @@ import CardActions from "@/components/CardActions/CardActions";
 import { handleDeleteConfirmation } from "@/components/HandleDelete/handleDelete";
 import TableActionButton from "@/components/TableActionButton/TableActionButton";
 import { deleteFuncionario } from "@/lib/actions/funcionario/deleteFuncionario";
-import { deleteCargo } from "@/lib/actions/cargo/deleteCargo"; // Novo handler para deletar cargos
+import { deleteCargo } from "@/lib/actions/funcionario/cargo/deleteCargo"; // Novo handler para deletar cargos
 import { fetchSWRFuncionarios } from "@/lib/actions/funcionario/fetchSWRFuncionarios";
-import { fetchSWRCargos } from "@/lib/actions/cargo/fetchSWRCargos"; // Novo fetcher para buscar cargos
+import { fetchSWRCargos } from "@/lib/actions/funcionario/cargo/fetchSWRCargos"; // Novo fetcher para buscar cargos
 import { EmployeeWithRelations } from "@/lib/utils/prismaTypes/employeeWithRelations";
 import { Role } from "@prisma/client";
-import { Alert, Card, Input, Modal, Spin, Table } from "antd";
+import { Alert, Card, Input, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import useSWR from "swr";

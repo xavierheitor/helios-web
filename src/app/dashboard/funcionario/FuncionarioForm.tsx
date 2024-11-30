@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { EmployeeWithRelations } from "@/lib/utils/prismaTypes/employeeWithRelations";
 import fetchSWRContratos from "@/lib/actions/contratos/fetchSWRContracts";
-import { fetchSWRCargos } from "@/lib/actions/cargo/fetchSWRCargos";
+import { fetchSWRCargos } from "@/lib/actions/funcionario/cargo/fetchSWRCargos";
 
 import { z } from "zod";
 import { EmployeeFormSchema } from "@/lib/utils/formSchemas/employeeFormSchema";

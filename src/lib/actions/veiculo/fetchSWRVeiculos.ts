@@ -6,14 +6,14 @@ import { SWRError } from "@/lib/common/errors/SWRError";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
-import { EmployeeWithRelations } from "@/lib/utils/prismaTypes/employeeWithRelations";
+import { VehicleWithRelations } from "@/lib/utils/prismaTypes/vehicleWithRelations";
 
-export async function fetchSWRFuncionarios(): Promise<EmployeeWithRelations[]> {
-  logger.info("fetchSWRFuncionarios action called");
+export async function fetchSWRVeiculos(): Promise<VehicleWithRelations[]> {
+  logger.info("fetchSWRVeiculos action called");
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_funcionario,
+    MenuKeys.cadastros_veiculo,
     PERMISSIONS.VIEW
   );
 
@@ -23,10 +23,10 @@ export async function fetchSWRFuncionarios(): Promise<EmployeeWithRelations[]> {
   }
 
   try {
-    const employees = await prisma.employee.findMany({
+    const veiculos = await prisma.vehicle.findMany({
       include: {
-        role: true,
         contract: true,
+        vehicleType: true,
       },
       where: {
         contractId: {
@@ -36,18 +36,18 @@ export async function fetchSWRFuncionarios(): Promise<EmployeeWithRelations[]> {
     });
 
     logger.info(
-      `Usuário ${permissionCheck?.userId} buscou ${employees.length} funcionários`
+      `Usuário ${permissionCheck?.userId} buscou ${veiculos.length} veículos`
     );
 
-    return employees;
+    return veiculos;
   } catch (error: unknown) {
     // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao buscar funcionários: ${error.message}`, { error });
+      logger.error(`Erro ao buscar veículos: ${error.message}`, { error });
       throw new SWRError(error.message);
     } else {
-      logger.error("Erro desconhecido ao buscar funcionários", { error });
-      throw new SWRError("Erro desconhecido ao buscar funcionários");
+      logger.error("Erro desconhecido ao buscar veículos", { error });
+      throw new SWRError("Erro desconhecido ao buscar veículos");
     }
   }
 }

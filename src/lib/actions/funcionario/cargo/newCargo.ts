@@ -2,8 +2,8 @@
 
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
-import { FormState } from "../../../../types/actions/form-state";
-import { ActionResult } from "../../../../types/actions/action-result";
+import { FormState } from "../../../../../types/actions/form-state";
+import { ActionResult } from "../../../../../types/actions/action-result";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { PERMISSIONS } from "@/enums/permissions";
 import { MenuKeys } from "@/enums/menus";

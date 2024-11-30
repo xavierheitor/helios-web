@@ -1,9 +1,11 @@
+
+
 import React, { useEffect } from "react";
 import { Form, Input, Button, Alert, notification, InputNumber } from "antd";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { Role } from "@prisma/client";
-import { editCargo } from "@/lib/actions/cargo/editCargo";
-import { newCargo } from "@/lib/actions/cargo/newCargo";
+import { editCargo } from "@/lib/actions/funcionario/cargo/editCargo";
+import { newCargo } from "@/lib/actions/funcionario/cargo/newCargo";
 
 interface CargoFormProps {
   cargo?: Role | null;

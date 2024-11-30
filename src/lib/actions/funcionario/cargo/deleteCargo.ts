@@ -5,7 +5,7 @@ import { PERMISSIONS } from "@/enums/permissions";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
-import { ActionResult } from "../../../../types/actions/action-result";
+import { ActionResult } from "../../../../../types/actions/action-result";
 
 export async function deleteCargo(id: number): Promise<ActionResult> {
   logger.info(`deleteCargo action called for id ${id}`);
