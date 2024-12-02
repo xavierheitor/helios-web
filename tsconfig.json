@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/dashboard/not-found.tsx", "src/middleware.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/dashboard/not-found.tsx", "src/middleware.ts", "prisma/seeds/dbSeed.mjs"],
   "exclude": ["node_modules"]
 }

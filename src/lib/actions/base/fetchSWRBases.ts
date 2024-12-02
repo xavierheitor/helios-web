@@ -27,6 +27,11 @@ export async function fetchSWRBases(): Promise<BaseWithRelations[]> {
       include: {
         contract: true,
       },
+      where: {
+        contractId: {
+          in: permissionCheck.allowedContractsId,
+        },
+      },
     });
 
     logger.info(
