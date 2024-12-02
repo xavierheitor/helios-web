@@ -67,9 +67,9 @@ model User {
 
   ChecklistAssociatedQuestion ChecklistAssociatedQuestion[]
 
-  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
+  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssociation[]
 
-  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
+  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssociation[]
 }
 
 model Account {
@@ -155,6 +155,18 @@ model UserModulePermission {
   deletedAt DateTime?
 
   @@unique([userId, module])
+}
+
+// ------------------ ACTION LOG -------------------------
+model ActionLog {
+  id         Int      @id @default(autoincrement())
+  action     String // Descrição da ação realizada (e.g., "CREATE", "UPDATE", "DELETE")
+  userId     Int? // ID do usuário que executou a ação (null se for um sistema externo)
+  user       User?    @relation(fields: [userId], references: [id])
+  targetId   Int? // ID do recurso afetado (exemplo: contrato, checklist, etc.)
+  targetType String // Tipo do recurso afetado (e.g., "Contrato", "Checklist")
+  details    String?  @db.LongText // JSON ou texto com detalhes adicionais da ação
+  createdAt  DateTime @default(now()) // Quando a ação foi realizada
 }
 
 //------------------------- CADASTROS -------------------------
@@ -305,7 +317,7 @@ model VehicleType {
 
   vehicles Vehicle[]
 
-  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
+  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssociation[]
 }
 
 model Team {
@@ -342,7 +354,7 @@ model TeamType {
 
   teams Team[]
 
-  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
+  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssociation[]
 }
 
 model Device {
@@ -457,9 +469,9 @@ model Checklist {
 
   associatedQuestions ChecklistAssociatedQuestion[]
 
-  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssossiation[]
+  ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssociation[]
 
-  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssossiation[]
+  ChecklistTeamTypeAssossiation ChecklistTeamTypeAssociation[]
 }
 
 model ChecklistAssociatedQuestion {
@@ -478,7 +490,7 @@ model ChecklistAssociatedQuestion {
   @@unique([checklistId, questionId])
 }
 
-model ChecklistVehicleTypeAssossiation {
+model ChecklistVehicleTypeAssociation {
   id Int @id @default(autoincrement())
 
   checklistId Int
@@ -492,9 +504,10 @@ model ChecklistVehicleTypeAssossiation {
   createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   @@unique([vehicleTypeId])
+  @@map("ChecklistVehicleTypeAssociation")
 }
 
-model ChecklistTeamTypeAssossiation {
+model ChecklistTeamTypeAssociation {
   id Int @id @default(autoincrement())
 
   checklistId Int
@@ -508,16 +521,5 @@ model ChecklistTeamTypeAssossiation {
   createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
   @@unique([teamTypeId])
-}
-
-// ------------------ ACTION LOG -------------------------
-model ActionLog {
-  id         Int      @id @default(autoincrement())
-  action     String // Descrição da ação realizada (e.g., "CREATE", "UPDATE", "DELETE")
-  userId     Int? // ID do usuário que executou a ação (null se for um sistema externo)
-  user       User?    @relation(fields: [userId], references: [id])
-  targetId   Int? // ID do recurso afetado (exemplo: contrato, checklist, etc.)
-  targetType String // Tipo do recurso afetado (e.g., "Contrato", "Checklist")
-  details    String?  @db.LongText // JSON ou texto com detalhes adicionais da ação
-  createdAt  DateTime @default(now()) // Quando a ação foi realizada
+  @@map("ChecklistTeamTypeAssociation")
 }
