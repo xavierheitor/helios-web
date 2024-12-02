@@ -2,7 +2,6 @@
 
 import { MenuKeys } from "@/enums/menus";
 import { PERMISSIONS } from "@/enums/permissions";
-import { SWRError } from "@/lib/common/errors/SWRError";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
@@ -76,7 +75,9 @@ export async function newVeiculo(
       },
     });
 
-    logger.info(`Veículo ${veiculo.plate} criado com sucesso`);
+    logger.info(
+      `Veículo ${veiculo.plate} criado com sucesso pelo usuário ${permissionCheck.userId}`
+    );
     return {
       success: true,
       message: "Veículo criado com sucesso",

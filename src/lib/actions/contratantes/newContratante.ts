@@ -5,7 +5,6 @@ import prisma from "@/lib/common/prisma";
 
 import { FormState } from "../../../../types/actions/form-state";
 import { ActionResult } from "../../../../types/actions/action-result";
-import { verifySession } from "@/lib/server/session";
 import { ContractorFormSchema } from "../../utils/formSchemas/contratante";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { MenuKeys } from "@/enums/menus";

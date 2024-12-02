@@ -11,7 +11,9 @@ export async function newModulePermission(
   state: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info("newModulePermission action called", { formData });
+  logger.info(
+    `newModulePermission called with data: ${JSON.stringify(formData)}`
+  );
 
   // **Verificação de Autenticação**
   const session = await verifySession();

@@ -1,23 +1,23 @@
 "use server";
 
+import { MenuKeys } from "@/enums/menus";
+import { PERMISSIONS } from "@/enums/permissions";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
 import { FormState } from "../../../../types/actions/form-state";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
-import { MenuKeys } from "@/enums/menus";
-import { PERMISSIONS } from "@/enums/permissions";
-import { BaseFormSchema } from "@/lib/utils/formSchemas/baseFormSchema";
+import { TeamFormSchema } from "@/lib/utils/formSchemas/equipeFormSchema";
 
-export async function newBase(
+export async function newEquipe(
   formState: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info("newBase action called", { formData });
+  logger.info(`newEquipe action called`, formData);
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_base,
+    MenuKeys.cadastros_equipe,
     PERMISSIONS.CREATE
   );
 
@@ -29,12 +29,10 @@ export async function newBase(
     };
   }
 
-  // **Validação dos Campos do Formulário**
-
-  const validatedFields = BaseFormSchema.safeParse({
-    id: formData.get("id"),
+  const validatedFields = TeamFormSchema.safeParse({
     name: formData.get("name"),
     contractId: formData.get("contractId"),
+    teamTypeId: formData.get("teamTypeId"),
   });
 
   if (!validatedFields.success) {
@@ -43,42 +41,41 @@ export async function newBase(
     return {
       success: false,
       errors,
-      message: "Campos do formulário inválidos",
     };
   }
 
-  const { name, contractId } = validatedFields.data;
+  const { name, contractId, teamTypeId } = validatedFields.data;
 
   try {
-    const newBase = await prisma.base.create({
+    const equipe = await prisma.team.create({
       data: {
-        name: name,
-        contractId: contractId,
+        name,
+        contractId,
+        teamTypeId,
         createdByUser: permissionCheck.userId,
       },
     });
 
     logger.info(
-      `Base ${newBase.id} criada com sucesso pelo user ${permissionCheck.userId}`
+      `Equipe ${equipe.id} criada com sucesso pelo usuário ${permissionCheck.userId}`
     );
-
     return {
       success: true,
-      message: "Base criada com sucesso",
+      message: "Equipe criada com sucesso",
     };
   } catch (error: unknown) {
     // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao criar base: ${error.message}`, { error });
+      logger.error(`Erro ao criar equipe: ${error.message}`, { error });
       return {
         success: false,
         message: error.message,
       };
     } else {
-      logger.error("Erro desconhecido ao criar base", { error });
+      logger.error("Erro desconhecido ao criar equipe", { error });
       return {
         success: false,
-        message: "Erro desconhecido ao criar base",
+        message: "Ocorreu um erro ao criar a equipe.",
       };
     }
   }

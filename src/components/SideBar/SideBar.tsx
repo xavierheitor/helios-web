@@ -56,16 +56,8 @@ const menuItems: MenuItemProps[] = [
         label: <Link href="/dashboard/veiculo">Veículos</Link>,
       },
       {
-        key: MenuKeys.cadastros_tipoVeiculo,
-        label: <Link href="/dashboard/tipoVeiculo">Tipos de Veículos</Link>,
-      },
-      {
         key: MenuKeys.cadastros_equipe,
         label: <Link href="/dashboard/equipe">Equipes</Link>,
-      },
-      {
-        key: MenuKeys.cadastros_tipoEquipe,
-        label: <Link href="/dashboard/tipoEquipe">Tipos de Equipes</Link>,
       },
       {
         key: "cadastros_checklist",

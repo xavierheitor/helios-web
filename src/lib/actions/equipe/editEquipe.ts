@@ -7,17 +7,17 @@ import prisma from "@/lib/common/prisma";
 import { FormState } from "../../../../types/actions/form-state";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
-import { VehicleFormSchema } from "@/lib/utils/formSchemas/vehicleFormSchema";
+import { TeamFormSchema } from "@/lib/utils/formSchemas/equipeFormSchema";
 
-export async function editVeiculo(
+export async function editEquipe(
   formState: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info("editVeiculo action called", formData);
+  logger.info("editEquipe action called", formData);
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_veiculo,
+    MenuKeys.cadastros_equipe,
     PERMISSIONS.EDIT
   );
 
@@ -31,22 +31,17 @@ export async function editVeiculo(
 
   const id = parseInt(formData.get("id")?.toString() || "0");
   if (isNaN(id) || id <= 0) {
-    logger.error(`ID do veículo inválido: ${formData.get("id")}`);
+    logger.error(`ID da equipe inválido: ${formData.get("id")}`);
     return {
       success: false,
-      message: "ID do veículo inválido",
+      message: "ID da equipe inválido",
     };
   }
 
-  const validatedFields = VehicleFormSchema.safeParse({
-    plate: formData.get("plate"),
-    brand: formData.get("brand"),
-    model: formData.get("model"),
-    year: formData.get("year"),
-    color: formData.get("color"),
-    operationalNumber: formData.get("operationalNumber"),
+  const validatedFields = TeamFormSchema.safeParse({
+    name: formData.get("name"),
     contractId: formData.get("contractId"),
-    vehicleTypeId: formData.get("vehicleTypeId"),
+    teamsTypeId: formData.get("teamsTypeId"),
   });
 
   if (!validatedFields.success) {
@@ -58,68 +53,49 @@ export async function editVeiculo(
     };
   }
 
-  const {
-    plate,
-    brand,
-    model,
-    year,
-    color,
-    operationalNumber,
-    contractId,
-    vehicleTypeId,
-  } = validatedFields.data;
-  try {
-    const veiculo = await prisma.vehicle.findFirst({
-      where: {
-        id: id,
-      },
-    });
+  const { name, contractId, teamTypeId } = validatedFields.data;
 
-    if (!veiculo) {
-      logger.error(`Veículo não encontrado: ${id}`);
+  try {
+    const equipe = prisma.team.findUnique({ where: { id } });
+
+    if (!equipe) {
+      logger.error(`Equipe ${id} não encontrada`);
       return {
         success: false,
-        message: "Veículo não encontrado",
+        message: "Equipe não encontrada",
       };
     }
 
-    const updatedVeiculo = await prisma.vehicle.update({
-      where: {
-        id: id,
-      },
+    await prisma.team.update({
+      where: { id },
       data: {
-        plate,
-        brand,
-        model,
-        year,
-        color,
-        operationalNumber,
+        name,
         contractId,
-        vechicleTypeId: vehicleTypeId,
+        teamTypeId,
       },
     });
 
     logger.info(
-      `Veículo ${updatedVeiculo.plate} atualizado com sucesso pelo usuário ${permissionCheck.userId}`
+      `Equipe ${id} editada com sucesso pelo usuário ${permissionCheck.userId}`
     );
 
     return {
       success: true,
-      message: "Veículo atualizado com sucesso",
+      message: "Equipe editada com sucesso",
     };
   } catch (error: unknown) {
     // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao atualizar veículo: ${error.message}`, { error });
+      logger.error(`Erro ao editar equipe: ${error.message}`, { error });
       return {
         success: false,
         message: error.message,
       };
     } else {
-      logger.error("Erro desconhecido ao atualizar veículo", { error });
+      logger.error("Erro desconhecido ao editar equipe", { error });
       return {
         success: false,
-        message: "Ocorreu um erro ao atualizar o veículo.",
+        message: "Ocorreu um erro ao editar a equipe.",
       };
     }
   }

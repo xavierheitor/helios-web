@@ -1,23 +1,23 @@
 "use server";
 
-import { logger } from "@/lib/common/logger";
-import prisma from "@/lib/common/prisma";
-import { FormState } from "../../../../types/actions/form-state";
-import { ActionResult } from "../../../../types/actions/action-result";
-import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { MenuKeys } from "@/enums/menus";
 import { PERMISSIONS } from "@/enums/permissions";
-import { BaseFormSchema } from "@/lib/utils/formSchemas/baseFormSchema";
+import { logger } from "@/lib/common/logger";
+import prisma from "@/lib/common/prisma";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
+import { FormState } from "../../../../../types/actions/form-state";
+import { ActionResult } from "../../../../../types/actions/action-result";
+import { TeamTypeFormSchema } from "@/lib/utils/formSchemas/tipoEquipeFormSchema";
 
-export async function newBase(
+export async function newTipoEquipe(
   formState: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info("newBase action called", { formData });
+  logger.info("newTipoEquipe action called", formData);
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_base,
+    MenuKeys.cadastros_tipoEquipe,
     PERMISSIONS.CREATE
   );
 
@@ -29,12 +29,9 @@ export async function newBase(
     };
   }
 
-  // **Validação dos Campos do Formulário**
-
-  const validatedFields = BaseFormSchema.safeParse({
-    id: formData.get("id"),
+  const validatedFields = TeamTypeFormSchema.safeParse({
     name: formData.get("name"),
-    contractId: formData.get("contractId"),
+    description: formData.get("description"),
   });
 
   if (!validatedFields.success) {
@@ -43,42 +40,41 @@ export async function newBase(
     return {
       success: false,
       errors,
-      message: "Campos do formulário inválidos",
     };
   }
 
-  const { name, contractId } = validatedFields.data;
+  const { name, description } = validatedFields.data;
 
   try {
-    const newBase = await prisma.base.create({
+    const tipoEquipe = await prisma.teamType.create({
       data: {
-        name: name,
-        contractId: contractId,
+        name,
+        description,
         createdByUser: permissionCheck.userId,
       },
     });
 
     logger.info(
-      `Base ${newBase.id} criada com sucesso pelo user ${permissionCheck.userId}`
+      `Tipo de equipe ${tipoEquipe.id} criado com sucesso pelo usuário ${permissionCheck.userId}`
     );
 
     return {
       success: true,
-      message: "Base criada com sucesso",
+      message: "Tipo de equipe criado com sucesso",
     };
   } catch (error: unknown) {
     // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao criar base: ${error.message}`, { error });
+      logger.error(`Erro ao criar tipo de equipe: ${error.message}`, { error });
       return {
         success: false,
         message: error.message,
       };
     } else {
-      logger.error("Erro desconhecido ao criar base", { error });
+      logger.error("Erro desconhecido ao criar tipo de equipe", { error });
       return {
         success: false,
-        message: "Erro desconhecido ao criar base",
+        message: "Erro desconhecido ao criar tipo de equipe",
       };
     }
   }
