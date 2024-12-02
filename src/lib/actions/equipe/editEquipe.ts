@@ -41,7 +41,7 @@ export async function editEquipe(
   const validatedFields = TeamFormSchema.safeParse({
     name: formData.get("name"),
     contractId: formData.get("contractId"),
-    teamsTypeId: formData.get("teamsTypeId"),
+    teamTypeId: formData.get("teamTypeId"),
   });
 
   if (!validatedFields.success) {

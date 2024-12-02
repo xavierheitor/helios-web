@@ -4,7 +4,7 @@ import CardActions from "@/components/CardActions/CardActions";
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import ErrorFallback from "@/components/ErrorFallback/ErrorFallback";
 import TableActionButton from "@/components/TableActionButton/TableActionButton";
-import { fetchSWRContratantes } from "@/lib/actions/contratantes/fetchSWRContratantes";
+import { fetchSWRContratantes } from "@/lib/actions/contratante/fetchSWRContratantes";
 import { Contractor } from "@prisma/client";
 import { Alert, Card, Input, Modal } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
@@ -12,7 +12,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import ContractorForm from "./ContratanteForm";
 import { handleDeleteConfirmation } from "@/components/HandleDelete/handleDelete";
-import { deleteContratante } from "@/lib/actions/contratantes/deleteContratante";
+import { deleteContratante } from "@/lib/actions/contratante/deleteContratante";
 
 const { Search } = Input;
 

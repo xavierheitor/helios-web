@@ -349,8 +349,8 @@ model Device {
   id   Int    @id @default(autoincrement())
   name String
 
-  deviceTypeId String @unique
-  key          String @unique @default("123456")
+  deviceUniqueId String @unique
+  deviceKey      String @unique @default("123456")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

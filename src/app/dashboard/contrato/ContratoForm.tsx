@@ -13,9 +13,9 @@ import useSWR from "swr";
 import dayjs from "dayjs";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { Contract } from "@prisma/client";
-import { fetchSWRContratantes } from "@/lib/actions/contratantes/fetchSWRContratantes";
-import { editContract } from "@/lib/actions/contratos/editContract";
-import { newContract } from "@/lib/actions/contratos/newContract";
+import { fetchSWRContratantes } from "@/lib/actions/contratante/fetchSWRContratantes";
+import { editContract } from "@/lib/actions/contrato/editContract";
+import { newContract } from "@/lib/actions/contrato/newContract";
 
 interface ContractFormProps {
   contract?: Contract | null;

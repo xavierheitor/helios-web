@@ -12,7 +12,7 @@ import useSWR from "swr";
 import dayjs from "dayjs";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { EmployeeWithRelations } from "@/lib/utils/prismaTypes/employeeWithRelations";
-import fetchSWRContratos from "@/lib/actions/contratos/fetchSWRContracts";
+import fetchSWRContratos from "@/lib/actions/contrato/fetchSWRContracts";
 import { fetchSWRCargos } from "@/lib/actions/funcionario/cargo/fetchSWRCargos";
 
 import { z } from "zod";

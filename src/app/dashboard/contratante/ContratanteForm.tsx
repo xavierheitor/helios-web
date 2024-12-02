@@ -9,8 +9,8 @@ import {
   Select,
 } from "antd";
 import { Contractor } from "@prisma/client";
-import { editContratante } from "@/lib/actions/contratantes/editContratante";
-import { newContratante } from "@/lib/actions/contratantes/newContratante";
+import { editContratante } from "@/lib/actions/contratante/editContratante";
+import { newContratante } from "@/lib/actions/contratante/newContratante";
 import { ActionResult } from "../../../../types/actions/action-result";
 
 import { STATE } from "@/enums/states";

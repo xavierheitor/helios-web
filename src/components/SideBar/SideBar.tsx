@@ -36,10 +36,6 @@ const menuItems: MenuItemProps[] = [
         label: <Link href="/dashboard/contrato">Contratos</Link>,
       },
       {
-        key: MenuKeys.cadastros_cargo,
-        label: <Link href="/dashboard/cargo">Cargos</Link>,
-      },
-      {
         key: MenuKeys.cadastros_contratante,
         label: <Link href="/dashboard/contratante">Contratantes</Link>,
       },

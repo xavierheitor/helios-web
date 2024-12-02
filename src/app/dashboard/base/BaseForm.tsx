@@ -11,7 +11,7 @@ import {
 import useSWR from "swr";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { Base } from "@prisma/client";
-import fetchSWRContratos from "@/lib/actions/contratos/fetchSWRContracts";
+import fetchSWRContratos from "@/lib/actions/contrato/fetchSWRContracts";
 import { editBase } from "@/lib/actions/base/editBase";
 import { newBase } from "@/lib/actions/base/newBase";
 

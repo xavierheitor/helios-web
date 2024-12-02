@@ -1,4 +1,4 @@
-import fetchSWRContratos from "@/lib/actions/contratos/fetchSWRContracts";
+import fetchSWRContratos from "@/lib/actions/contrato/fetchSWRContracts";
 import { editVeiculo } from "@/lib/actions/veiculo/editVeiculo";
 import { newVeiculo } from "@/lib/actions/veiculo/newVeiculo";
 import { fetchSWRTipoVeiculo } from "@/lib/actions/veiculo/tipoVeiculo/fetchSWRTipoVeiculo";
