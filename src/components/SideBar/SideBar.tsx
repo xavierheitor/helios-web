@@ -55,28 +55,28 @@ const menuItems: MenuItemProps[] = [
         key: MenuKeys.cadastros_equipe,
         label: <Link href="/dashboard/equipe">Equipes</Link>,
       },
+    ],
+  },
+  {
+    key: MenuKeys.checklist,
+    icon: <Icons.CheckSquareOutlined />,
+    label: "Checklist",
+    children: [
       {
-        key: "cadastros_checklist",
-        icon: <Icons.CheckSquareOutlined />,
-        label: "Checklist",
-        children: [
-          {
-            key: MenuKeys.cadastros_checklist_tipo,
-            label: <Link href="/dashboard/tipoChecklist">Tipo Checklist</Link>,
-          },
-          {
-            key: MenuKeys.cadastros_checklist_checklist,
-            label: <Link href="/dashboard/checklist">Checklist</Link>,
-          },
-          {
-            key: MenuKeys.cadastros_checklist_pergunta,
-            label: <Link href="/dashboard/perguntaChecklist">Perguntas</Link>,
-          },
-          {
-            key: MenuKeys.cadastros_checklist_opcaoResposta,
-            label: <Link href="/dashboard/opcaoResposta">Respostas</Link>,
-          },
-        ],
+        key: MenuKeys.cadastros_checklist_tipo,
+        label: <Link href="/dashboard/checklist/tipo">Tipo Checklist</Link>,
+      },
+      {
+        key: MenuKeys.cadastros_checklist,
+        label: <Link href="/dashboard/checklist#">Checklist</Link>,
+      },
+      {
+        key: MenuKeys.cadastros_checklist_pergunta,
+        label: <Link href="/dashboard/checklist/pergunta">Perguntas</Link>,
+      },
+      {
+        key: MenuKeys.cadastros_checklist_opcaoResposta,
+        label: <Link href="/dashboard/checklist/opcaoResposta">Respostas</Link>,
       },
     ],
   },

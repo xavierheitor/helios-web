@@ -1,11 +1,16 @@
+// src/enums/menus.ts
+
 // Define o array MENUS com grupos
 export const MENUS = [
+  // ** GERAL
   {
     key: "dashboard",
-    href: "/dashboard#",
+    href: "/dashboard",
     module: "Dashboard",
     group: "Geral",
   },
+
+  // ** CADASTROS
   {
     key: "cadastros_base",
     href: "/dashboard/base",
@@ -16,12 +21,6 @@ export const MENUS = [
     key: "cadastros_contrato",
     href: "/dashboard/contrato",
     module: "Contrato",
-    group: "Cadastros",
-  },
-  {
-    key: "cadastros_cargo",
-    href: "/dashboard/cargo",
-    module: "Cargo",
     group: "Cadastros",
   },
   {
@@ -49,47 +48,57 @@ export const MENUS = [
     group: "Cadastros",
   },
   {
-    key: "cadastros_tipoVeiculo",
-    href: "/#",
-    module: "TipoVeiculo",
-    group: "Cadastros",
-  },
-  {
     key: "cadastros_equipe",
     href: "/dashboard/equipe",
     module: "Equipe",
     group: "Cadastros",
   },
   {
+    key: "cadastros_cargo",
+    href: "/dashboard/cargo",
+    module: "Cargo",
+    group: "Cadastros",
+  },
+  {
+    key: "cadastros_tipoVeiculo",
+    href: "/dashboard/tipoVeiculo",
+    module: "TipoVeiculo",
+    group: "Cadastros",
+  },
+  {
     key: "cadastros_tipoEquipe",
-    href: "/#",
+    href: "/dashboard/tipoEquipe",
     module: "TipoEquipe",
     group: "Cadastros",
   },
+
+  // ** CHECKLIST
   {
     key: "cadastros_checklist_tipo",
-    href: "/#",
+    href: "/dashboard/checklist/tipoChecklist",
     module: "TipoChecklist",
-    group: "Cadastros",
+    group: "Checklist",
   },
   {
-    key: "cadastros_checklist_checklist",
+    key: "cadastros_checklist",
     href: "/dashboard/checklist",
     module: "Checklist",
-    group: "Cadastros",
+    group: "Checklist",
   },
   {
     key: "cadastros_checklist_pergunta",
-    href: "/dashboard/perguntaChecklist",
+    href: "/dashboard/checklist/pergunta",
     module: "PerguntaChecklist",
-    group: "Cadastros",
+    group: "Checklist",
   },
   {
     key: "cadastros_checklist_opcaoResposta",
-    href: "/dashboard/opcaoResposta",
+    href: "/dashboard/checklist/opcaoResposta",
     module: "OpcaoResposta",
-    group: "Cadastros",
+    group: "Checklist",
   },
+
+  // ** USUÁRIOS
   {
     key: "usuarios_list",
     href: "/dashboard/user",
@@ -138,16 +147,3 @@ export const MenuGroups = MENUS.reduce((acc, menu) => {
   acc[group].push(menu);
   return acc;
 }, {} as Record<string, typeof MENUS>);
-
-// Exemplo de MenuGroups resultante
-// {
-//   Geral: [{ key: "dashboard", href: "/dashboard#", module: "Dashboard", group: "Geral" }],
-//   Cadastros: [
-//     { key: "cadastros_base", href: "/dashboard/base", module: "Base", group: "Cadastros" },
-//     ...
-//   ],
-//   Usuários: [
-//     { key: "usuarios_list", href: "/dashboard/user", module: "Usuarios", group: "Usuários" },
-//     ...
-//   ]
-// }

@@ -1,3 +1,4 @@
+// src/lib/actions/checklist/resposta/newResposta.ts
 "use server";
 
 import { MenuKeys } from "@/enums/menus";
@@ -7,17 +8,21 @@ import prisma from "@/lib/common/prisma";
 import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { FormState } from "../../../../../types/actions/form-state";
 import { ActionResult } from "../../../../../types/actions/action-result";
-import { TeamTypeFormSchema } from "@/lib/utils/formSchemas/tipoEquipeFormSchema";
+import { AnswerFormSchema } from "@/lib/utils/formSchemas/answerFormSchema";
 
-export async function newTipoEquipe(
+export async function newResposta(
   formState: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info(`newTipoEquipe action called. data: ${JSON.stringify(formData)}`);
+  logger.info(
+    `newResposta action called. data: ${JSON.stringify(
+      Object.fromEntries(formData)
+    )}`
+  );
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_tipoEquipe,
+    MenuKeys.cadastros_checklist_opcaoResposta,
     PERMISSIONS.CREATE
   );
 
@@ -29,9 +34,10 @@ export async function newTipoEquipe(
     };
   }
 
-  const validatedFields = TeamTypeFormSchema.safeParse({
-    name: formData.get("name"),
-    description: formData.get("description"),
+  const validatedFields = AnswerFormSchema.safeParse({
+    text: formData.get("text"),
+    checklistTypeId: formData.get("checklistTypeId"),
+    pending: formData.get("pending"),
   });
 
   if (!validatedFields.success) {
@@ -40,41 +46,45 @@ export async function newTipoEquipe(
     return {
       success: false,
       errors,
+      message: "Campos do formulário inválidos",
     };
   }
 
-  const { name, description } = validatedFields.data;
+  const { text, pending, checklistTypeId } = validatedFields.data;
 
   try {
-    const tipoEquipe = await prisma.teamType.create({
+    const resposta = await prisma.answer.create({
       data: {
-        name,
-        description,
+        text,
+        pending,
+        checklistTypeId: checklistTypeId,
         createdByUser: permissionCheck.userId,
       },
     });
 
     logger.info(
-      `Tipo de equipe ${tipoEquipe.id} criado com sucesso pelo usuário ${permissionCheck.userId}`
+      `Resposta ${resposta.id} criada com sucesso pelo usuário ${permissionCheck.userId}`
     );
 
     return {
       success: true,
-      message: "Tipo de equipe criado com sucesso",
+      message: "Resposta criada com sucesso",
     };
   } catch (error: unknown) {
     // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao criar tipo de equipe: ${error.message}`, { error });
+      logger.error(`Erro ao criar resposta: ${error.message}`, {
+        error,
+      });
       return {
         success: false,
         message: error.message,
       };
     } else {
-      logger.error("Erro desconhecido ao criar tipo de equipe", { error });
+      logger.error("Erro desconhecido ao criar resposta", { error });
       return {
         success: false,
-        message: "Erro desconhecido ao criar tipo de equipe",
+        message: "Erro desconhecido ao criar resposta",
       };
     }
   }

@@ -4,23 +4,21 @@ import { MenuKeys } from "@/enums/menus";
 import { PERMISSIONS } from "@/enums/permissions";
 import { logger } from "@/lib/common/logger";
 import prisma from "@/lib/common/prisma";
-import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { FormState } from "../../../../../types/actions/form-state";
 import { ActionResult } from "../../../../../types/actions/action-result";
-import { TeamTypeFormSchema } from "@/lib/utils/formSchemas/tipoEquipeFormSchema";
+import { checkUserPermissions } from "@/lib/server/checkUserPermission";
+import { ChecklistTypeFormSchema } from "@/lib/utils/formSchemas/tipoChecklistFormSchema";
 
-export async function editTipoEquipe(
+export async function newTipoChecklist(
   formState: FormState,
   formData: FormData
 ): Promise<ActionResult> {
-  logger.info(
-    `editTipoEquipe action called. data: ${JSON.stringify(formData)}`
-  );
+  logger.info(`newTipoChecklist action called. data: ${formData}`);
 
   // **Verificação de Permissões**
   const permissionCheck = await checkUserPermissions(
-    MenuKeys.cadastros_tipoEquipe,
-    PERMISSIONS.EDIT
+    MenuKeys.cadastros_checklist_tipo,
+    PERMISSIONS.CREATE
   );
 
   if (!permissionCheck.allowed) {
@@ -31,16 +29,7 @@ export async function editTipoEquipe(
     };
   }
 
-  const id = parseInt(formData.get("id")?.toString() || "0");
-  if (isNaN(id) || id <= 0) {
-    logger.error(`ID do tipo de equipe inválido: ${formData.get("id")}`);
-    return {
-      success: false,
-      message: "ID do tipo de equipe inválido",
-    };
-  }
-
-  const validatedFields = TeamTypeFormSchema.safeParse({
+  const validatedFields = ChecklistTypeFormSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
   });
@@ -57,36 +46,26 @@ export async function editTipoEquipe(
   const { name, description } = validatedFields.data;
 
   try {
-    const tipoEquipe = await prisma.teamType.findFirst({ where: { id } });
-
-    if (!tipoEquipe) {
-      logger.error(`Tipo de equipe ${id} não encontrado`);
-      return {
-        success: false,
-        message: "Tipo de equipe não encontrado",
-      };
-    }
-
-    await prisma.teamType.update({
-      where: { id },
+    const tipoChecklist = await prisma.checklistType.create({
       data: {
         name,
         description,
+        createdByUser: permissionCheck.userId,
       },
     });
 
     logger.info(
-      `Tipo de equipe ${id} editado com sucesso pelo usuário ${permissionCheck.userId}`
+      `Tipo de checklist ${tipoChecklist.id} criado com sucesso pelo usuário ${permissionCheck.userId}`
     );
 
     return {
       success: true,
-      message: "Tipo de equipe editado com sucesso",
+      message: "Tipo de checklist criado com sucesso",
     };
   } catch (error: unknown) {
     // **Tratamento de Erros**
     if (error instanceof Error) {
-      logger.error(`Erro ao editar tipo de equipe: ${error.message}`, {
+      logger.error(`Erro ao criar tipo de checklist: ${error.message}`, {
         error,
       });
       return {
@@ -94,10 +73,10 @@ export async function editTipoEquipe(
         message: error.message,
       };
     } else {
-      logger.error("Erro desconhecido ao editar tipo de equipe", { error });
+      logger.error("Erro desconhecido ao criar tipo de checklist", { error });
       return {
         success: false,
-        message: "Erro desconhecido ao editar tipo de equipe",
+        message: "Erro desconhecido ao criar tipo de checklist",
       };
     }
   }
