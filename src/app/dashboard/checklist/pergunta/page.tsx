@@ -62,11 +62,6 @@ const PerguntaPage: React.FC = () => {
 
   const columns: ColumnsType<QuestionWithRelations> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Pergunta",
       dataIndex: "text",
       key: "text",

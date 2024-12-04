@@ -100,7 +100,7 @@ export default function Home({
           </ErrorBoundary>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Helios ©{new Date().getFullYear()} Created by Helix
+          Helios ©{new Date().getFullYear()} Created by Xsys Solutions
         </Footer>
       </Layout>
     </Layout>

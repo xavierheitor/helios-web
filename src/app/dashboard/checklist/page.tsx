@@ -63,11 +63,6 @@ const ChecklistPage: React.FC = () => {
 
   const columns: ColumnsType<ChecklistWithRelations> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Nome",
       dataIndex: "name",
       key: "name",

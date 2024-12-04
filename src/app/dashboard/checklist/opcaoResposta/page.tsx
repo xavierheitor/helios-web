@@ -58,23 +58,23 @@ const RespostaPage: React.FC = () => {
   };
 
   const normalizeText = (text: string) =>
-    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
 
   const filteredRespostas = respostas?.filter((resposta) => {
     const normalizedSearchText = normalizeText(searchText);
     return (
       normalizeText(resposta.text).includes(normalizedSearchText) ||
-      normalizeText(resposta.checklistType.name).includes(normalizedSearchText) ||
+      normalizeText(resposta.checklistType.name).includes(
+        normalizedSearchText
+      ) ||
       (resposta.pending ? "sim" : "nao").includes(normalizedSearchText)
     );
   });
 
   const columns: ColumnsType<AnswerWithRelations> = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
     {
       title: "Resposta",
       dataIndex: "text",

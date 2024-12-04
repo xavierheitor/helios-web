@@ -93,12 +93,7 @@ const FuncionarioPage: React.FC = () => {
 
   // ** Colunas Funcionários **
   const funcionarioColumns: ColumnsType<EmployeeWithRelations> = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => a.id - b.id,
-    },
+
     {
       title: "Nome",
       dataIndex: "name",
@@ -134,12 +129,7 @@ const FuncionarioPage: React.FC = () => {
 
   // ** Colunas Cargos **
   const cargoColumns: ColumnsType<Role> = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => a.id - b.id,
-    },
+
     {
       title: "Nome",
       dataIndex: "name",

@@ -99,22 +99,16 @@ const ChecklistAssociationsPage: React.FC = () => {
   const vehicleTypeColumns: ColumnsType<ChecklistVehicleTypeAssociationWithRelations> =
     [
       {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-      },
-      {
-        title: "Checklist",
-        dataIndex: ["checklist", "name"],
-        key: "checklistId",
-      },
-      {
         title: "Tipo de Veículo",
         dataIndex: ["vehicleType", "name"],
         key: "vehicleType",
         sorter: (a, b) =>
           (a.vehicleType?.name || "").localeCompare(b.vehicleType?.name || ""),
+      },
+      {
+        title: "Checklist",
+        dataIndex: ["checklist", "name"],
+        key: "checklistId",
       },
       {
         title: "Ações",
@@ -132,22 +126,16 @@ const ChecklistAssociationsPage: React.FC = () => {
   const teamTypeColumns: ColumnsType<ChecklistTeamTypeAssociationWithRelations> =
     [
       {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-      },
-      {
-        title: "Checklist",
-        dataIndex: ["checklist", "name"],
-        key: "checklistId",
-      },
-      {
         title: "Tipo de Equipe",
         dataIndex: ["teamType", "name"],
         key: "teamType",
         sorter: (a, b) =>
           (a.teamType?.name || "").localeCompare(b.teamType?.name || ""),
+      },
+      {
+        title: "Checklist",
+        dataIndex: ["checklist", "name"],
+        key: "checklistId",
       },
       {
         title: "Ações",

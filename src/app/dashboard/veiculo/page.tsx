@@ -82,12 +82,6 @@ const VeiculoPage: React.FC = () => {
   // ** colum Veiculos
   const veiculosColumns: ColumnsType<VehicleWithRelations> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => (a.id || 0) - (b.id || 0),
-    },
-    {
       title: "Placa",
       dataIndex: "plate",
       key: "plate",
@@ -122,12 +116,6 @@ const VeiculoPage: React.FC = () => {
 
   // ** TipoVeiculo columns
   const tipoVeiculoColumns: ColumnsType<VehicleType> = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => (a.id || 0) - (b.id || 0),
-    },
     {
       title: "Nome",
       dataIndex: "name",

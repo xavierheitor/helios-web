@@ -82,12 +82,6 @@ const EquipePage: React.FC = () => {
   // ** column Equipes
   const equipesColumns: ColumnsType = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
       title: "Nome",
       dataIndex: "name",
       key: "name",
@@ -119,12 +113,6 @@ const EquipePage: React.FC = () => {
 
   // ** TipoEquipe columns
   const tipoEquipesColumns: ColumnsType<TeamType> = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => (a.id || 0) - (b.id || 0),
-    },
     {
       title: "Nome",
       dataIndex: "name",

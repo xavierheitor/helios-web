@@ -61,13 +61,6 @@ const BasePage: React.FC = () => {
 
   const columns: ColumnsType<BaseWithRelations> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a, b) => a.id - b.id,
-      width: 70,
-    },
-    {
       title: "Nome",
       dataIndex: "name",
       key: "name",

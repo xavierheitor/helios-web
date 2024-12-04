@@ -61,11 +61,6 @@ const TipoChecklistPage: React.FC = () => {
 
   const columns: ColumnsType<ChecklistType> = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Nome",
       dataIndex: "name",
       key: "name",
