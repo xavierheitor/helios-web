@@ -97,6 +97,12 @@ export const MENUS = [
     module: "OpcaoResposta",
     group: "Checklist",
   },
+  {
+    key: "cadastros_checklist_associacao",
+    href: "/dashboard/checklist/associacao",
+    module: "associacao",
+    group: "Checklist",
+  },
 
   // ** USUÁRIOS
   {

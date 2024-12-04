@@ -1,11 +1,20 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma, { setCurrentUserId } from "@/lib/common/prisma";
 import bcrypt from "bcrypt";
-import type { NextAuthOptions, User } from "next-auth";
-import type { JWT as DefaultJWT } from "next-auth/jwt";
-import type { Session } from "next-auth";
+
+type ModulesPermission = Record<
+  string,
+  {
+    canView: boolean;
+    canCreate: boolean;
+    canEdit: boolean;
+    canDelete: boolean;
+    menuKey?: string | null;
+    href?: string | null;
+  }
+>;
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -28,7 +37,7 @@ export const authOptions: NextAuthOptions = {
 
         // Buscar o usuário no banco de dados pelo username
         const user = await prisma.user.findFirst({
-          where: { username, deletedAt: null }, // Adicionado filtro para soft delete
+          where: { username, deletedAt: null },
         });
 
         if (!user) throw new Error("Usuário não encontrado");
@@ -55,44 +64,17 @@ export const authOptions: NextAuthOptions = {
     updateAge: 30 * 60, // Atualizar sessão a cada 30 minutos
   },
   callbacks: {
-    async jwt({
-      token,
-      user,
-    }: {
-      token: DefaultJWT;
-      user: User;
-    }): Promise<DefaultJWT> {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.username = user.username;
         token.email = user.email ?? "";
 
-        // Buscar permissões de contratos
-        const contratoPermissions =
-          await prisma.userContractPermission.findMany({
-            where: {
-              userId: parseInt(user.id, 10),
-              deletedAt: null, // Ignorar registros removidos logicamente
-            },
-            select: {
-              contractId: true,
-              canView: true,
-              canCreate: true,
-              canEdit: true,
-              canDelete: true,
-            },
-          });
-
-        token.allowedContractsId = contratoPermissions.map(
-          (perm) => perm.contractId
-        ); // IDs permitidos
-        token.allowedContracts = contratoPermissions; // Permissões detalhadas
-
         // Buscar permissões de módulos
         const userPermissions = await prisma.userModulePermission.findMany({
           where: {
             userId: parseInt(user.id, 10),
-            deletedAt: null, // Ignorar registros removidos logicamente
+            deletedAt: null,
           },
           select: {
             module: true,
@@ -115,21 +97,18 @@ export const authOptions: NextAuthOptions = {
             href: perm.href,
           };
           return acc;
-        }, {} as Record<string, { canView: boolean; canCreate: boolean; canEdit: boolean; canDelete: boolean; menuKey: string | null; href: string | null }>);
-
-        return token;
+        }, {} as ModulesPermission);
       }
 
       return token;
     },
-    async session({ session, token }: { session: Session; token: DefaultJWT }) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.email = token.email as string;
-        session.user.allowedContractsId = token.allowedContractsId as number[];
-        session.user.allowedContracts = token.allowedContracts || [];
-        session.user.modulesPermissions = token.modulesPermissions || {};
+        session.user.modulesPermissions =
+          (token.modulesPermissions as ModulesPermission) || {};
 
         // Define o ID do usuário logado no Prisma para logs
         setCurrentUserId(parseInt(token.id as string, 10));
@@ -151,6 +130,10 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
 };
 
-// Exportar funções nomeadas para cada método HTTP
+// Exportar o handler de acordo com a estrutura do projeto
+// Se estiver usando o diretório 'pages':a
+// export default NextAuth(authOptions);
+
+// Se estiver usando o diretório 'app' do Next.js 13, use:
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

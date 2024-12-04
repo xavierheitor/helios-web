@@ -78,6 +78,14 @@ const menuItems: MenuItemProps[] = [
         key: MenuKeys.cadastros_checklist_opcaoResposta,
         label: <Link href="/dashboard/checklist/opcaoResposta">Respostas</Link>,
       },
+      {
+        key: MenuKeys.cadastros_checklist_associacao,
+        label: (
+          <Link href="/dashboard/checklist/associacao">
+            Associar Checklists
+          </Link>
+        ),
+      },
     ],
   },
   {

@@ -97,6 +97,8 @@ model Session {
   userId       Int
   expires      DateTime
 
+  deletedAt DateTime?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -505,6 +507,8 @@ model ChecklistVehicleTypeAssociation {
   createdByUser Int? // ID do usuário que criou esta permissão
   createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
 
+  deletedAt DateTime?
+
   @@unique([vehicleTypeId])
   @@map("ChecklistVehicleTypeAssociation")
 }
@@ -521,6 +525,8 @@ model ChecklistTeamTypeAssociation {
   // Criado por
   createdByUser Int? // ID do usuário que criou esta permissão
   createdBy     User? @relation(fields: [createdByUser], references: [id], onDelete: SetNull)
+
+  deletedAt DateTime?
 
   @@unique([teamTypeId])
   @@map("ChecklistTeamTypeAssociation")

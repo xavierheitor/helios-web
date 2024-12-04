@@ -2,7 +2,8 @@ import { verifySession } from "@/lib/server/session";
 import { logger } from "@/lib/common/logger";
 import { MenuKeys } from "@/enums/menus"; // Certifique-se de que MenuKeys está exportado corretamente
 import { PERMISSIONS } from "@/enums/permissions";
-import { UserContractPermission } from "@prisma/client";
+import prisma from "@/lib/common/prisma"; // Importar o Prisma Client
+import { UserContractPermission } from "@prisma/client"; // Importar o tipo se necessário
 
 export async function checkUserPermissions(
   moduleKey: keyof typeof MenuKeys, // Garantir que moduleKey seja uma chave válida de MenuKeys
@@ -21,24 +22,38 @@ export async function checkUserPermissions(
   );
 
   // Verificar sessão
-  if (!session?.isAuth) {
+  if (!session?.isAuth || !session.userId) {
     logger.error("User not authenticated");
     return { allowed: false, message: "Usuário não autenticado" };
   }
 
-  // Obter permissões de módulos da sessão
-  const permissions = session?.modulesPermissions || {};
+  const userId = session.userId;
+
+  // Obter permissões de módulos do banco de dados
+  const userPermissions = await prisma.userModulePermission.findMany({
+    where: {
+      userId: userId,
+      deletedAt: null,
+    },
+    select: {
+      module: true,
+      canView: true,
+      canCreate: true,
+      canEdit: true,
+      canDelete: true,
+      menuKey: true,
+      href: true,
+    },
+  });
 
   // Verificar permissão no módulo
-  const permission = Object.values(permissions).find(
-    (perm) => perm.menuKey === moduleKey
-  );
+  const permission = userPermissions.find((perm) => perm.menuKey === moduleKey);
 
   if (!permission || !permission[action]) {
     logger.warn({
       message: `Permission denied`,
       details: {
-        userId: session.userId,
+        userId,
         moduleKey,
         action,
         reason: !permission
@@ -53,21 +68,34 @@ export async function checkUserPermissions(
     };
   }
 
-  // Obter lista de contratos permitidos (IDs e permissões detalhadas)
-  const allowedContracts = session?.allowedContratos || [];
-  const allowedContractsId = allowedContracts.map(
-    (contract) => contract.contractId
-  ) as number[];
+  // Obter lista de contratos permitidos (IDs e permissões detalhadas) do banco de dados
+  const userContractPermissions = await prisma.userContractPermission.findMany({
+    where: {
+      userId: userId,
+      deletedAt: null,
+    },
+    select: {
+      contractId: true,
+      canView: true,
+      canCreate: true,
+      canEdit: true,
+      canDelete: true,
+    },
+  });
 
-  if (allowedContracts.length === 0) {
+  const allowedContractsId = userContractPermissions.map(
+    (contract) => contract.contractId
+  );
+
+  if (userContractPermissions.length === 0) {
     logger.warn({
       message: `No allowed contracts found`,
-      details: { userId: session.userId },
+      details: { userId },
     });
   } else {
     logger.info({
       message: `Allowed contracts retrieved`,
-      details: { userId: session.userId, allowedContracts },
+      details: { userId, allowedContracts: userContractPermissions },
     });
   }
 
@@ -78,8 +106,8 @@ export async function checkUserPermissions(
   return {
     allowed: true,
     message: "Permissão concedida",
-    userId: session.userId,
+    userId,
     allowedContractsId,
-    allowedContracts,
+    allowedContracts: userContractPermissions,
   };
 }
