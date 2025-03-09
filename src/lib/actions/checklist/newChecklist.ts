@@ -9,6 +9,7 @@ import { checkUserPermissions } from "@/lib/server/checkUserPermission";
 import { FormState } from "../../../../types/actions/form-state";
 import { ActionResult } from "../../../../types/actions/action-result";
 import { ChecklistFormSchema } from "@/lib/utils/formSchemas/checklistFormSchema";
+import { ChecklistMobileType } from "@prisma/client";
 
 export async function newChecklist(
   formState: FormState,
@@ -42,6 +43,7 @@ export async function newChecklist(
     name: formData.get("name"),
     description: formData.get("description"),
     checklistTypeId: formData.get("checklistTypeId"),
+    ChecklistMobileType: formData.get("checklistMobileType") as ChecklistMobileType,
     questionsIds,
   });
 
@@ -62,6 +64,7 @@ export async function newChecklist(
         name,
         description,
         checklistTypeId,
+        checklistMobileType: formData.get("checklistMobileType") as ChecklistMobileType,
         createdByUser: permissionCheck.userId,
       },
     });

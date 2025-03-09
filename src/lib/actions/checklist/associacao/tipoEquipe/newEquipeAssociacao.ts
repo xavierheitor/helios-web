@@ -49,20 +49,20 @@ export async function newChecklistTeamTypeAssociation(
   const { checklistId, teamTypeId } = validatedFields.data;
 
   try {
-    const existingAssociation =
-      await prisma.checklistTeamTypeAssociation.findUnique({
-        where: { teamTypeId },
-      });
+    // const existingAssociation =
+    //   await prisma.checklistTeamTypeAssociation.findFirst({
+    //     where: { teamTypeId },
+    //   });
 
-    if (existingAssociation) {
-      logger.error(
-        `Associação já existe para o tipo de equipe ID: ${teamTypeId}`
-      );
-      return {
-        success: false,
-        message: "Esta associação de tipo de equipe já existe.",
-      };
-    }
+    // if (existingAssociation) {
+    //   logger.error(
+    //     `Associação já existe para o tipo de equipe ID: ${teamTypeId}`
+    //   );
+    //   return {
+    //     success: false,
+    //     message: "Esta associação de tipo de equipe já existe.",
+    //   };
+    // }
 
     const association = await prisma.checklistTeamTypeAssociation.create({
       data: {

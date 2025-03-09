@@ -16,5 +16,6 @@ export const ChecklistFormSchema = z.object({
     .number()
     .int()
     .positive({ message: "O tipo de checklist é obrigatório." }),
+  checklistMobileType: z.string(),
   questionsIds: z.array(z.number().int().positive()).optional(),
 });

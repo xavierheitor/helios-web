@@ -73,6 +73,11 @@ const ChecklistPage: React.FC = () => {
       key: "checklistType",
     },
     {
+      title: "Tipo mobile",
+      dataIndex: "checklistMobileType",
+      key: "checklistMobileType",
+    },
+    {
       title: "Ações",
       key: "actions",
       render: (_, record) => (

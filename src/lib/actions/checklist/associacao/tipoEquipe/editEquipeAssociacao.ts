@@ -48,7 +48,7 @@ export async function editChecklistTeamTypeAssociation(
   const { id, teamTypeId } = validatedFields.data;
 
   try {
-    const association = await prisma.checklistTeamTypeAssociation.findUnique({
+    const association = await prisma.checklistTeamTypeAssociation.findFirst({
       where: { id },
     });
 
@@ -63,7 +63,7 @@ export async function editChecklistTeamTypeAssociation(
     if (association.teamTypeId !== teamTypeId) {
       // Verificar se a nova teamTypeId já está associada
       const existingAssociation =
-        await prisma.checklistTeamTypeAssociation.findUnique({
+        await prisma.checklistTeamTypeAssociation.findFirst({
           where: { teamTypeId },
         });
 

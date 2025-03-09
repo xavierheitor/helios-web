@@ -22,6 +22,7 @@ import { z } from "zod";
 import type { Key } from "react";
 import { ChecklistWithRelations } from "@/lib/utils/prismaTypes/checklistWithRelations";
 
+import { CHECKLIST_MOBILE_TYPE } from "@/enums/checklistMobileType";
 interface ChecklistFormProps {
   checklist?: ChecklistWithRelations | null;
   onSuccess: () => void;
@@ -32,6 +33,7 @@ interface ChecklistFormValues {
   name: string;
   description?: string | null;
   checklistTypeId: number;
+  checklistMobileType: string;
   questionsIds?: number[];
 }
 
@@ -62,6 +64,7 @@ const ChecklistForm: React.FC<ChecklistFormProps> = ({
         name: checklist.name,
         description: checklist.description,
         checklistTypeId: checklist.checklistTypeId,
+        checklistMobileType: checklist.checklistMobileType,
       });
 
       const selectedKeys =
@@ -95,6 +98,7 @@ const ChecklistForm: React.FC<ChecklistFormProps> = ({
         "checklistTypeId",
         validatedFields.checklistTypeId.toString()
       );
+      data.append("checklistMobileType", validatedFields.checklistMobileType);
       data.append("questionsIds", JSON.stringify(validatedFields.questionsIds));
 
       const action = checklist ? editChecklist : newChecklist;
@@ -213,6 +217,7 @@ const ChecklistForm: React.FC<ChecklistFormProps> = ({
         name: checklist?.name || "",
         description: checklist?.description || "",
         checklistTypeId: checklist?.checklistTypeId,
+        checklistMobileType: checklist?.checklistMobileType,
       }}
       disabled={loading}
     >
@@ -268,6 +273,23 @@ const ChecklistForm: React.FC<ChecklistFormProps> = ({
             value: type.id,
           }))}
           onChange={handleChecklistTypeChange}
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="checklistMobileType"
+        label="Tipo de Checklist Mobile"
+        hasFeedback
+        rules={[
+          { required: true, message: "Selecione o tipo de checklist mobile!" },
+        ]}
+      >
+        <Select
+          placeholder="Selecione o tipo de checklist mobile"
+          options={Object.values(CHECKLIST_MOBILE_TYPE).map((type) => ({
+            label: type,
+            value: type,
+          }))}
         />
       </Form.Item>
 

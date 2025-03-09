@@ -136,7 +136,7 @@ const ChecklistVehicleTypeAssociationForm: React.FC<
         >
           {checklists?.map((checklist) => (
             <Select.Option key={checklist.id} value={checklist.id}>
-              {checklist.name}
+              {checklist.name} - {checklist.checklistMobileType}
             </Select.Option>
           ))}
         </Select>

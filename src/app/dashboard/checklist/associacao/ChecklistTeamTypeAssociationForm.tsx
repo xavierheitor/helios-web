@@ -130,7 +130,7 @@ const ChecklistTeamTypeAssociationForm: React.FC<
         <Select placeholder="Selecione o checklist" loading={checklistsLoading}>
           {checklists?.map((checklist) => (
             <Select.Option key={checklist.id} value={checklist.id}>
-              {checklist.name}
+              {checklist.name} - {checklist.checklistMobileType}
             </Select.Option>
           ))}
         </Select>

@@ -111,6 +111,11 @@ const ChecklistAssociationsPage: React.FC = () => {
         key: "checklistId",
       },
       {
+        title: "Tipo de Checklist Mobile",
+        dataIndex: ["checklist", "checklistMobileType"],
+        key: "checklistMobileType",
+      },
+      {
         title: "Ações",
         key: "actions",
         render: (_, record) => (
@@ -136,6 +141,11 @@ const ChecklistAssociationsPage: React.FC = () => {
         title: "Checklist",
         dataIndex: ["checklist", "name"],
         key: "checklistId",
+      },
+      {
+        title: "Tipo de Checklist Mobile",
+        dataIndex: ["checklist", "checklistMobileType"],
+        key: "checklistMobileType",
       },
       {
         title: "Ações",

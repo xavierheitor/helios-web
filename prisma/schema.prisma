@@ -264,6 +264,12 @@ model Employee {
 
   roleId Int
   role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  CompletedChecklist CompletedChecklist[]
+
+  Shift Shift[]
+
+  ShiftComponents ShiftComponents[]
 }
 
 model Role {
@@ -302,6 +308,10 @@ model Vehicle {
 
   vechicleTypeId Int
   vehicleType    VehicleType @relation(fields: [vechicleTypeId], references: [id], onDelete: Cascade)
+
+  CompletedChecklist CompletedChecklist[]
+
+  Shift Shift[]
 }
 
 model VehicleType {
@@ -339,6 +349,10 @@ model Team {
 
   teamTypeId Int
   teamType   TeamType @relation(fields: [teamTypeId], references: [id], onDelete: Cascade)
+
+  CompletedChecklist CompletedChecklist[]
+
+  Shift Shift[]
 }
 
 model TeamType {
@@ -435,6 +449,10 @@ model Answer {
 
   checklistTypeId Int
   checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
+
+  checklistMobileType ChecklistMobileType @default(APR)
+
+  CompletedChecklist CompletedChecklist[]
 }
 
 model Question {
@@ -452,7 +470,18 @@ model Question {
   checklistTypeId Int
   checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
 
+  checklistMobileType ChecklistMobileType @default(EPC)
+
   ChecklistAssociatedQuestion ChecklistAssociatedQuestion[]
+
+  CompletedChecklist CompletedChecklist[]
+}
+
+enum ChecklistMobileType {
+  EPI
+  EPC
+  VEICULAR
+  APR
 }
 
 model Checklist {
@@ -462,6 +491,8 @@ model Checklist {
 
   checklistTypeId Int
   checklistType   ChecklistType @relation(fields: [checklistTypeId], references: [id], onDelete: Cascade)
+
+  checklistMobileType ChecklistMobileType @default(EPC)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -476,6 +507,8 @@ model Checklist {
   ChecklistVehicleTypeAssossiation ChecklistVehicleTypeAssociation[]
 
   ChecklistTeamTypeAssossiation ChecklistTeamTypeAssociation[]
+
+  CompletedChecklist CompletedChecklist[]
 }
 
 model ChecklistAssociatedQuestion {
@@ -528,6 +561,84 @@ model ChecklistTeamTypeAssociation {
 
   deletedAt DateTime?
 
-  @@unique([teamTypeId])
   @@map("ChecklistTeamTypeAssociation")
+}
+
+// ------------------ SHIFT -------------------------
+
+model Shift {
+  id Int @id @default(autoincrement())
+
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  initialKm Int
+
+  teamId Int
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  shiftComponents ShiftComponents[]
+
+  driverId Int
+  driver   Employee @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  initialFillDate  DateTime @default(now())
+  initialShiftDate DateTime @default(now())
+  endShiftDate     DateTime @default(now())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  CompletedChecklist CompletedChecklist[]
+}
+
+model ShiftComponents {
+  id Int @id @default(autoincrement())
+
+  shiftId Int
+  shift   Shift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+
+  employeeId Int
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  CompletedChecklist CompletedChecklist[]
+}
+
+model CompletedChecklist {
+  id Int @id @default(autoincrement())
+
+  shiftId Int
+  shift   Shift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+
+  date DateTime @default(now())
+
+  checklistId Int
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  vehicleId Int?
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+
+  teamId Int?
+  team   Team? @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  employeeId Int?
+  employee   Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+
+  shiftComponentId Int?
+  shiftComponent   ShiftComponents? @relation(fields: [shiftComponentId], references: [id], onDelete: SetNull)
+
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  answerId Int
+  answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
 }

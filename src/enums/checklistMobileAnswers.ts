@@ -1,0 +1,5 @@
+export enum CHECKLIST_MOBILE_ANSWERS {
+  APROV = "APROV",
+  REPROV = "REPROV",
+  NA = "NA",
+}
